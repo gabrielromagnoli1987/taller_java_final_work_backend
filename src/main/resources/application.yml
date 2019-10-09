@@ -1,0 +1,23 @@
+spring:
+  # profiles: local
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL55Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  datasource:
+    url: jdbc:mysql://pet_clinic_db:3306/petclinic?zeroDateTimeBehavior=CONVERT_TO_NULL
+    username: root
+    password: password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+# token - 5hs
+access.token:
+  validity.seconds: 18000
+signing.key: "petclinic_TTPS2019"
+issuer: "https://petclinic.com"
+
+header:
+  string: Authorization
+
+---
