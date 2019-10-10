@@ -20,4 +20,9 @@ issuer: "https://petclinic.com"
 header:
   string: Authorization
 
+admin:
+  name: "Admin"
+  email: "petclinicadmin@gmail.com"
+  password: "petClinicAdminPassword"
+
 ---

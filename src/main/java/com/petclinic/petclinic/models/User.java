@@ -6,6 +6,10 @@ import java.util.List;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 public class User {
@@ -44,7 +48,8 @@ public class User {
 	@OneToMany(mappedBy = "vet", cascade = CascadeType.ALL)
 	private List<Visit> visits = new ArrayList<>();
 
-	private Boolean enabled;
+	@NotNull
+	private Boolean isEnabled;
 
 	@ManyToMany
 	@JoinTable(
@@ -56,11 +61,10 @@ public class User {
 	public User() {
 	}
 
-	public User(@NotBlank String firstName, @NotBlank String lastName, @NotBlank @Email String email, @NotBlank String password) {
+	public User(@NotBlank String firstName, @NotBlank String lastName, @NotBlank @Email String email) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
-		this.password = password;
 	}
 
 	public Long getId() {
@@ -95,10 +99,12 @@ public class User {
 		this.email = email;
 	}
 
+	@JsonIgnore
 	public String getPassword() {
 		return password;
 	}
 
+	@JsonProperty
 	public void setPassword(String password) {
 		this.password = password;
 	}
@@ -143,12 +149,12 @@ public class User {
 		this.visits = visits;
 	}
 
-	public Boolean getEnabled() {
-		return enabled;
+	public Boolean isEnabled() {
+		return isEnabled;
 	}
 
-	public void setEnabled(Boolean enabled) {
-		this.enabled = enabled;
+	public void setIsEnabled(Boolean isEnabled) {
+		this.isEnabled = isEnabled;
 	}
 
 	public Collection<Role> getRoles() {
@@ -173,7 +179,7 @@ public class User {
 		if (password != null ? !password.equals(user.password) : user.password != null) return false;
 		if (address != null ? !address.equals(user.address) : user.address != null) return false;
 		if (resume != null ? !resume.equals(user.resume) : user.resume != null) return false;
-		if (enabled != null ? !enabled.equals(user.enabled) : user.enabled != null) return false;
+		if (isEnabled != null ? !isEnabled.equals(user.isEnabled) : user.isEnabled != null) return false;
 		return roles != null ? roles.equals(user.roles) : user.roles == null;
 	}
 
@@ -186,7 +192,7 @@ public class User {
 		result = 31 * result + (password != null ? password.hashCode() : 0);
 		result = 31 * result + (address != null ? address.hashCode() : 0);
 		result = 31 * result + (resume != null ? resume.hashCode() : 0);
-		result = 31 * result + (enabled != null ? enabled.hashCode() : 0);
+		result = 31 * result + (isEnabled != null ? isEnabled.hashCode() : 0);
 		result = 31 * result + (roles != null ? roles.hashCode() : 0);
 		return result;
 	}
