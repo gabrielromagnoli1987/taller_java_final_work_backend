@@ -10,19 +10,24 @@ spring:
     username: root
     password: password
     driver-class-name: com.mysql.cj.jdbc.Driver
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
 
 # token - 5hs
-access.token:
-  validity.seconds: 18000
-signing.key: "petclinic_TTPS2019"
+access-token-validity-seconds: 18000
+signing-key: "petclinic_TTPS2019"
 issuer: "https://petclinic.com"
 
-header:
-  string: Authorization
+header-string: Authorization
 
 admin:
   name: "Admin"
   email: "petclinicadmin@gmail.com"
   password: "petClinicAdminPassword"
+
+upload-files-folder: "./uploads"
 
 ---

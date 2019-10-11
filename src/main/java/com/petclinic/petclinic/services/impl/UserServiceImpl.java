@@ -1,9 +1,6 @@
 package com.petclinic.petclinic.services.impl;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 
@@ -19,6 +16,7 @@ import com.petclinic.petclinic.utils.EmailValidator;
 import com.petclinic.petclinic.utils.HashingPassword;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.GrantedAuthority;
@@ -39,17 +37,18 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 	@Override
 	public Iterable<User> getAllUsers() {
-		return null;
+		return userRepository.findAll();
 	}
 
 	@Override
 	public Page<User> getUsers(Pageable pageable) {
-		return null;
+		return userRepository.findAll(new PageRequest(pageable.getPageNumber(), pageable.getPageSize()));
 	}
 
 	@Override
 	public User getUserById(Long userId) throws EntityNotFoundException {
-		return null;
+		Optional<User> user = userRepository.findById(userId);
+		return user.orElseThrow(() -> new EntityNotFoundException("User with id: " + userId + " does not exists"));
 	}
 
 	@Override

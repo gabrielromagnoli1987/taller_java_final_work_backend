@@ -60,6 +60,9 @@ public class Pet {
 	@OneToMany(mappedBy = "pet", cascade = CascadeType.ALL)
 	private List<Visit> visits = new ArrayList<>();
 
+	@OneToMany(mappedBy = "pet", cascade = CascadeType.ALL)
+	private List<Image> images = new ArrayList<>();
+
 	public Pet() {
 
 	}
@@ -195,6 +198,14 @@ public class Pet {
 
 	public void setVisits(List<Visit> visits) {
 		this.visits = visits;
+	}
+
+	public List<Image> getImages() {
+		return images;
+	}
+
+	public void setImages(List<Image> images) {
+		this.images = images;
 	}
 
 	@Override

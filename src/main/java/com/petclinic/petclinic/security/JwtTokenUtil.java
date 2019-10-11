@@ -21,10 +21,10 @@ public class JwtTokenUtil implements Serializable {
 	 */
 	private static final long serialVersionUID = 7592274011196895036L;
 
-	@Value("${access.token.validity.seconds}")
+	@Value("${access-token-validity-seconds}")
 	private Integer ACCESS_TOKEN_VALIDITY_SECONDS;
 
-	@Value("${signing.key}")
+	@Value("${signing-key}")
 	private String SIGNING_KEY;
 
 	@Value("${issuer}")

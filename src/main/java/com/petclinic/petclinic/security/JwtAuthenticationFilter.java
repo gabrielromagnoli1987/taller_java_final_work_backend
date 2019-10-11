@@ -19,7 +19,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-	@Value("${header.string}")
+	@Value("${header-string}")
 	private String HEADER_STRING;
 
 	@Qualifier("userService")
