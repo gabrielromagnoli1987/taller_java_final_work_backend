@@ -49,7 +49,7 @@ public class EmailServiceImpl implements EmailService {
 			helper.setTo(to);
 			helper.setSubject(subject);
 			helper.setText(text);
-			
+
 			FileSystemResource file = new FileSystemResource(new File(pathToAttachment));
 			helper.addAttachment("Invoice", file);
 
