@@ -65,7 +65,6 @@ public class JwtTokenUtil implements Serializable {
 		claims.put("scopes", authorities);
 
 		return Jwts.builder()
-				.setHeader(Map.of("typ", "JWT"))
 				.setClaims(claims)
 				.setIssuer(ISSUER)
 				.setIssuedAt(new Date(System.currentTimeMillis()))
