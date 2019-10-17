@@ -1,9 +1,12 @@
 package com.petclinic.petclinic.models;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Disease {
@@ -54,6 +57,7 @@ public class Disease {
 		this.description = description;
 	}
 
+	@JsonIgnore
 	public Pet getPet() {
 		return pet;
 	}
@@ -69,10 +73,10 @@ public class Disease {
 
 		Disease disease = (Disease) o;
 
-		if (id != null ? !id.equals(disease.id) : disease.id != null) return false;
+		if (!Objects.equals(id, disease.id)) return false;
 		if (!localDateTime.equals(disease.localDateTime)) return false;
-		if (description != null ? !description.equals(disease.description) : disease.description != null) return false;
-		return pet != null ? pet.equals(disease.pet) : disease.pet == null;
+		if (!Objects.equals(description, disease.description)) return false;
+		return Objects.equals(pet, disease.pet);
 	}
 
 	@Override

@@ -12,6 +12,7 @@ import com.petclinic.petclinic.models.UserConfig;
 import com.petclinic.petclinic.models.constants.Roles;
 import com.petclinic.petclinic.repositories.PrivilegeRepository;
 import com.petclinic.petclinic.repositories.RoleRepository;
+import com.petclinic.petclinic.repositories.UserConfigRepository;
 import com.petclinic.petclinic.repositories.UserRepository;
 import com.petclinic.petclinic.services.EmailService;
 import com.petclinic.petclinic.services.UserService;
@@ -40,6 +41,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 	@Autowired
 	UserRepository userRepository;
+
+	@Autowired
+	UserConfigRepository userConfigRepository;
 
 	@Autowired
 	EmailService emailService;
@@ -80,6 +84,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 				user.setPassword(HashingPassword.hashPassword(userDTO.getPassword()));
 				user.setIsEnabled(true);
 				UserConfig userConfig = new UserConfig();
+				userConfigRepository.save(userConfig);
 				user.setUserConfig(userConfig);
 				Role role;
 				if (userDTO.isVet()) {

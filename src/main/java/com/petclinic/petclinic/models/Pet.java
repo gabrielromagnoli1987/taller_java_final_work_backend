@@ -3,11 +3,13 @@ package com.petclinic.petclinic.models;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.petclinic.petclinic.models.constants.Sex;
 
 @Entity
@@ -144,6 +146,7 @@ public class Pet {
 		this.owner = owner;
 	}
 
+	@JsonIgnore
 	public List<User> getVets() {
 		return vets;
 	}
@@ -215,23 +218,23 @@ public class Pet {
 
 		Pet pet = (Pet) o;
 
-		if (id != null ? !id.equals(pet.id) : pet.id != null) return false;
-		if (name != null ? !name.equals(pet.name) : pet.name != null) return false;
+		if (!Objects.equals(id, pet.id)) return false;
+		if (!Objects.equals(name, pet.name)) return false;
 		if (!bornDate.equals(pet.bornDate)) return false;
-		if (species != null ? !species.equals(pet.species) : pet.species != null) return false;
-		if (race != null ? !race.equals(pet.race) : pet.race != null) return false;
+		if (!Objects.equals(species, pet.species)) return false;
+		if (!Objects.equals(race, pet.race)) return false;
 		if (sex != pet.sex) return false;
-		if (color != null ? !color.equals(pet.color) : pet.color != null) return false;
-		if (observations != null ? !observations.equals(pet.observations) : pet.observations != null) return false;
-		if (owner != null ? !owner.equals(pet.owner) : pet.owner != null) return false;
-		if (vets != null ? !vets.equals(pet.vets) : pet.vets != null) return false;
-		if (vaccines != null ? !vaccines.equals(pet.vaccines) : pet.vaccines != null) return false;
-		if (surgeries != null ? !surgeries.equals(pet.surgeries) : pet.surgeries != null) return false;
-		if (diseases != null ? !diseases.equals(pet.diseases) : pet.diseases != null) return false;
-		if (reproductiveHistory != null ? !reproductiveHistory.equals(pet.reproductiveHistory) : pet.reproductiveHistory != null)
+		if (!Objects.equals(color, pet.color)) return false;
+		if (!Objects.equals(observations, pet.observations)) return false;
+		if (!Objects.equals(owner, pet.owner)) return false;
+		if (!Objects.equals(vets, pet.vets)) return false;
+		if (!Objects.equals(vaccines, pet.vaccines)) return false;
+		if (!Objects.equals(surgeries, pet.surgeries)) return false;
+		if (!Objects.equals(diseases, pet.diseases)) return false;
+		if (!Objects.equals(reproductiveHistory, pet.reproductiveHistory))
 			return false;
-		if (deworming != null ? !deworming.equals(pet.deworming) : pet.deworming != null) return false;
-		return visits != null ? visits.equals(pet.visits) : pet.visits == null;
+		if (!Objects.equals(deworming, pet.deworming)) return false;
+		return Objects.equals(visits, pet.visits);
 	}
 
 	@Override

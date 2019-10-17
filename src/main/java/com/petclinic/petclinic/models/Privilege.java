@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Privilege {
 
@@ -44,6 +46,7 @@ public class Privilege {
 		this.name = name;
 	}
 
+	@JsonIgnore
 	public Collection<Role> getRoles() {
 		return roles;
 	}

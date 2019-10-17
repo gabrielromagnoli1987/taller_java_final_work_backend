@@ -1,8 +1,11 @@
 package com.petclinic.petclinic.models;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Reproduction {
@@ -53,6 +56,7 @@ public class Reproduction {
 		this.numberOfpuppies = numberOfpuppies;
 	}
 
+	@JsonIgnore
 	public Pet getPet() {
 		return pet;
 	}
@@ -68,10 +72,10 @@ public class Reproduction {
 
 		Reproduction that = (Reproduction) o;
 
-		if (id != null ? !id.equals(that.id) : that.id != null) return false;
+		if (!Objects.equals(id, that.id)) return false;
 		if (!localDateTime.equals(that.localDateTime)) return false;
 		if (!numberOfpuppies.equals(that.numberOfpuppies)) return false;
-		return pet != null ? pet.equals(that.pet) : that.pet == null;
+		return Objects.equals(pet, that.pet);
 	}
 
 	@Override

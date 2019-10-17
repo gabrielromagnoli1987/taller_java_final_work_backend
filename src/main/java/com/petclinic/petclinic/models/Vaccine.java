@@ -1,9 +1,12 @@
 package com.petclinic.petclinic.models;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Vaccine {
@@ -54,6 +57,7 @@ public class Vaccine {
 		this.description = description;
 	}
 
+	@JsonIgnore
 	public Pet getPet() {
 		return pet;
 	}
@@ -69,10 +73,10 @@ public class Vaccine {
 
 		Vaccine vaccine = (Vaccine) o;
 
-		if (id != null ? !id.equals(vaccine.id) : vaccine.id != null) return false;
+		if (!Objects.equals(id, vaccine.id)) return false;
 		if (!localDateTime.equals(vaccine.localDateTime)) return false;
-		if (description != null ? !description.equals(vaccine.description) : vaccine.description != null) return false;
-		return pet != null ? pet.equals(vaccine.pet) : vaccine.pet == null;
+		if (!Objects.equals(description, vaccine.description)) return false;
+		return Objects.equals(pet, vaccine.pet);
 	}
 
 	@Override
