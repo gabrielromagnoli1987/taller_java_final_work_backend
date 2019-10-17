@@ -1,6 +1,7 @@
 package com.petclinic.petclinic.security;
 
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
@@ -46,7 +47,7 @@ public class JwtTokenUtil implements Serializable {
 
 	private Claims getAllClaimsFromToken(String token) {
 		return Jwts.parser()
-				.setSigningKey(SIGNING_KEY)
+				.setSigningKey(SIGNING_KEY.getBytes(StandardCharsets.UTF_8))
 				.parseClaimsJws(token)
 				.getBody();
 	}
@@ -69,7 +70,7 @@ public class JwtTokenUtil implements Serializable {
 				.setIssuer(ISSUER)
 				.setIssuedAt(new Date(System.currentTimeMillis()))
 				.setExpiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_VALIDITY_SECONDS * 1000))
-				.signWith(SignatureAlgorithm.HS256, SIGNING_KEY)
+				.signWith(SignatureAlgorithm.HS512, SIGNING_KEY.getBytes(StandardCharsets.UTF_8))
 				.compact();
 	}
 
