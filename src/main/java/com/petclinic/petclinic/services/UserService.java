@@ -27,4 +27,5 @@ public interface UserService {
 
 	User updateUserEmail(String email, Long userId) throws EntityNotFoundException, EntityExistsException;
 
+	String deleteUserById(Long userId);
 }

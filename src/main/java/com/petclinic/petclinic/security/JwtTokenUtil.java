@@ -3,6 +3,7 @@ package com.petclinic.petclinic.security;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Map;
 import java.util.function.Function;
 
 import io.jsonwebtoken.Claims;
@@ -60,11 +61,11 @@ public class JwtTokenUtil implements Serializable {
 	}
 
 	private String doGenerateToken(String subject, Collection<? extends GrantedAuthority> authorities) {
-
 		Claims claims = Jwts.claims().setSubject(subject);
 		claims.put("scopes", authorities);
 
 		return Jwts.builder()
+				.setHeader(Map.of("typ", "JWT"))
 				.setClaims(claims)
 				.setIssuer(ISSUER)
 				.setIssuedAt(new Date(System.currentTimeMillis()))

@@ -1,6 +1,7 @@
 package com.petclinic.petclinic.models;
 
 import java.util.Collection;
+import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -58,9 +59,9 @@ public class Privilege {
 
 		Privilege privilege = (Privilege) o;
 
-		if (id != null ? !id.equals(privilege.id) : privilege.id != null) return false;
-		if (name != null ? !name.equals(privilege.name) : privilege.name != null) return false;
-		return roles != null ? roles.equals(privilege.roles) : privilege.roles == null;
+		if (!Objects.equals(id, privilege.id)) return false;
+		if (!Objects.equals(name, privilege.name)) return false;
+		return Objects.equals(roles, privilege.roles);
 	}
 
 	@Override

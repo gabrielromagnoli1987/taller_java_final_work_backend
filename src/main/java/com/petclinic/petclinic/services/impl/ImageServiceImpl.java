@@ -22,7 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class ImageServiceImpl implements ImageService {
 
-	@Value("${upload.files.folder}")
+	@Value("${upload-files-folder}")
 	private String uploadFolder;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ImageServiceImpl.class.getName());

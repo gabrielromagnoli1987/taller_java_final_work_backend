@@ -1,10 +1,18 @@
 package com.petclinic.petclinic.models;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.OneToOne;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class UserConfig {
+
+    @Id
+    @GeneratedValue
+    private Long id;
 
     @OneToOne(mappedBy = "userConfig")
     private User user;
@@ -19,6 +27,15 @@ public class UserConfig {
 
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @JsonIgnore
     public User getUser() {
         return user;
     }
