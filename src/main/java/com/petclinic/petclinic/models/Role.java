@@ -1,8 +1,12 @@
 package com.petclinic.petclinic.models;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 public class Role {
@@ -22,7 +26,7 @@ public class Role {
 			name = "roles_privileges",
 			joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"),
 			inverseJoinColumns = @JoinColumn(name = "privilege_id", referencedColumnName = "id"))
-	private Collection<Privilege> privileges;
+	private Collection<Privilege> privileges = new ArrayList<>();
 
 	public Role() {
 	}
@@ -47,6 +51,7 @@ public class Role {
 		this.name = name;
 	}
 
+	@JsonProperty
 	public Collection<User> getUsers() {
 		return users;
 	}
@@ -70,10 +75,10 @@ public class Role {
 
 		Role role = (Role) o;
 
-		if (id != null ? !id.equals(role.id) : role.id != null) return false;
-		if (name != null ? !name.equals(role.name) : role.name != null) return false;
-		if (users != null ? !users.equals(role.users) : role.users != null) return false;
-		return privileges != null ? privileges.equals(role.privileges) : role.privileges == null;
+		if (!Objects.equals(id, role.id)) return false;
+		if (!Objects.equals(name, role.name)) return false;
+		if (!Objects.equals(users, role.users)) return false;
+		return Objects.equals(privileges, role.privileges);
 	}
 
 	@Override

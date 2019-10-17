@@ -3,6 +3,7 @@ package com.petclinic.petclinic.models;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -56,7 +57,7 @@ public class User {
 			name = "users_roles",
 			joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
 			inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-	private Collection<Role> roles;
+	private Collection<Role> roles = new ArrayList<>();
 
 	@OneToOne
 	private UserConfig userConfig;
@@ -183,15 +184,15 @@ public class User {
 
 		User user = (User) o;
 
-		if (id != null ? !id.equals(user.id) : user.id != null) return false;
-		if (firstName != null ? !firstName.equals(user.firstName) : user.firstName != null) return false;
-		if (lastName != null ? !lastName.equals(user.lastName) : user.lastName != null) return false;
-		if (email != null ? !email.equals(user.email) : user.email != null) return false;
-		if (password != null ? !password.equals(user.password) : user.password != null) return false;
-		if (address != null ? !address.equals(user.address) : user.address != null) return false;
-		if (resume != null ? !resume.equals(user.resume) : user.resume != null) return false;
-		if (isEnabled != null ? !isEnabled.equals(user.isEnabled) : user.isEnabled != null) return false;
-		return roles != null ? roles.equals(user.roles) : user.roles == null;
+		if (!Objects.equals(id, user.id)) return false;
+		if (!Objects.equals(firstName, user.firstName)) return false;
+		if (!Objects.equals(lastName, user.lastName)) return false;
+		if (!Objects.equals(email, user.email)) return false;
+		if (!Objects.equals(password, user.password)) return false;
+		if (!Objects.equals(address, user.address)) return false;
+		if (!Objects.equals(resume, user.resume)) return false;
+		if (!Objects.equals(isEnabled, user.isEnabled)) return false;
+		return Objects.equals(roles, user.roles);
 	}
 
 	@Override

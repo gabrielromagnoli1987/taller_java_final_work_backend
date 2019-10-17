@@ -18,16 +18,16 @@ services:
     container_name: pet_clinic_app
     restart: always
     build: .
+    image: pet_clinic_app
     working_dir: /app
     volumes:
-    - .:/app
-    - ~/.m2:/root/.m2
+    - ./target:/app/target
+    #- ~/.m2:/root/.m2
     ports:
+    - "5005:5005"
     - "8080:8080"
-    expose:
-    - "8080"
-    command: mvn spring-boot:run # -Drun.jvmArguments="-Dspring.profiles.active=local"
+    # command: mvn spring-boot:run -Dspring-boot.run.jvmArguments="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=0.0.0.0:5005"
+    # command: bash -c "mvn clean && mvn install -DskipTests && /usr/local/openjdk-11/bin/java -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=0.0.0.0:5005 -jar /app/target/petclinic-0.0.1-SNAPSHOT.jar"
+    command: bash -c "/usr/local/openjdk-11/bin/java -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=0.0.0.0:5005 -jar /app/target/petclinic-0.0.1-SNAPSHOT.jar"
     depends_on:
-    - pet_clinic_db
-    links:
     - pet_clinic_db

@@ -8,9 +8,12 @@ import com.petclinic.petclinic.dtos.UserDTO;
 import com.petclinic.petclinic.models.Privilege;
 import com.petclinic.petclinic.models.Role;
 import com.petclinic.petclinic.models.User;
+import com.petclinic.petclinic.models.UserConfig;
 import com.petclinic.petclinic.models.constants.Roles;
+import com.petclinic.petclinic.repositories.PrivilegeRepository;
 import com.petclinic.petclinic.repositories.RoleRepository;
 import com.petclinic.petclinic.repositories.UserRepository;
+import com.petclinic.petclinic.services.EmailService;
 import com.petclinic.petclinic.services.UserService;
 import com.petclinic.petclinic.utils.EmailValidator;
 import com.petclinic.petclinic.utils.HashingPassword;
@@ -30,10 +33,16 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService, UserDetailsService {
 
 	@Autowired
-	private UserRepository userRepository;
+	PrivilegeRepository privilegeRepository;
 
 	@Autowired
-	private RoleRepository roleRepository;
+	RoleRepository roleRepository;
+
+	@Autowired
+	UserRepository userRepository;
+
+	@Autowired
+	EmailService emailService;
 
 	@Override
 	public Iterable<User> getAllUsers() {
@@ -42,7 +51,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 	@Override
 	public Page<User> getUsers(Pageable pageable) {
-		return userRepository.findAll(new PageRequest(pageable.getPageNumber(), pageable.getPageSize()));
+		return userRepository.findAll(PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()));
 	}
 
 	@Override
@@ -53,7 +62,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 	@Override
 	public User getUserByEmail(String userEmail) throws EntityNotFoundException {
-		return null;
+		Optional<User> user = Optional.ofNullable(userRepository.findByEmail(userEmail));
+		return user.orElseThrow(() -> new EntityNotFoundException("User with email: " + userEmail + " does not exists"));
 	}
 
 	@Override
@@ -66,24 +76,26 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 		if (EmailValidator.validate(userDTO.getEmail())) {
 			User tempUser = userRepository.findByEmail(userDTO.getEmail());
 			if (tempUser == null) {
-
 				User user = new User(userDTO.getName(), userDTO.getLastname(), userDTO.getEmail());
 				user.setPassword(HashingPassword.hashPassword(userDTO.getPassword()));
 				user.setIsEnabled(true);
+				UserConfig userConfig = new UserConfig();
+				user.setUserConfig(userConfig);
 				Role role;
 				if (userDTO.isVet()) {
-					user.setAddress(userDTO.getAddress());
+					user.setAddress(userDTO.getAddress() != null ? userDTO.getAddress() : "");
 					// TODO: handle file
 					String path = "resumePath";
 					user.setResume(path);
 					role = roleRepository.findByName(Roles.ROLE_VET_USER.toString());
 				} else {
 					role = roleRepository.findByName(Roles.ROLE_OWNER_USER.toString());
-
+					user.setAddress("");
+					user.setResume("");
 				}
 				user.setRoles(Arrays.asList(role));
 				user = userRepository.save(user);
-				//emailService.sendEmail(user.getEmail(), "New Account", "Welcome");
+				emailService.sendEmail(user.getEmail(), "New Account", "Welcome");
 				return user;
 			} else {
 				throw new EntityExistsException("The email: " + userDTO.getEmail() + " already exists");
@@ -101,6 +113,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	@Override
 	public User updateUserEmail(String email, Long userId) throws EntityNotFoundException, EntityExistsException {
 		return null;
+	}
+
+	@Override
+	public String deleteUserById(Long userId) throws IllegalArgumentException {
+		userRepository.deleteById(userId);
+		return "The user with id: " + userId + "was deleted.";
 	}
 
 	/**

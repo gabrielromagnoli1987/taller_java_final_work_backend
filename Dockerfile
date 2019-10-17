@@ -1,1 +1,2 @@
-FROM maven:3.6-jdk-11
+FROM openjdk:11
+COPY target/ /app/target/

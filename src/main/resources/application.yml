@@ -1,5 +1,4 @@
 spring:
-  # profiles: local
   jpa:
     database-platform: org.hibernate.dialect.MySQL55Dialect
     hibernate:
@@ -42,6 +41,6 @@ admin:
   email: "petclinicadmin@gmail.com"
   password: "petClinicAdminPassword"
 
-upload-files-folder: "./uploads"
+upload-files-folder: "./static"
 
 ---
