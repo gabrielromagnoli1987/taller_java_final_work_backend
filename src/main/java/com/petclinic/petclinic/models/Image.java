@@ -1,7 +1,9 @@
 package com.petclinic.petclinic.models;
 
+import java.util.Objects;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
@@ -42,6 +44,7 @@ public class Image {
 		this.path = path;
 	}
 
+	@JsonIgnore
 	public Pet getPet() {
 		return pet;
 	}
@@ -57,7 +60,7 @@ public class Image {
 
 		Image image = (Image) o;
 
-		if (id != null ? !id.equals(image.id) : image.id != null) return false;
+		if (!Objects.equals(id, image.id)) return false;
 		return path != null ? path.equals(image.path) : image.path == null;
 	}
 

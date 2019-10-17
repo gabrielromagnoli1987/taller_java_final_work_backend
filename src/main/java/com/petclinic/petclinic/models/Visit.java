@@ -1,8 +1,11 @@
 package com.petclinic.petclinic.models;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Visit {
@@ -57,6 +60,7 @@ public class Visit {
 		this.weight = weight;
 	}
 
+	@JsonIgnore
 	public User getVet() {
 		return vet;
 	}
@@ -89,6 +93,7 @@ public class Visit {
 		this.indications = indications;
 	}
 
+	@JsonIgnore
 	public Pet getPet() {
 		return pet;
 	}
@@ -104,14 +109,14 @@ public class Visit {
 
 		Visit visit = (Visit) o;
 
-		if (id != null ? !id.equals(visit.id) : visit.id != null) return false;
+		if (!Objects.equals(id, visit.id)) return false;
 		if (!localDateTime.equals(visit.localDateTime)) return false;
-		if (weight != null ? !weight.equals(visit.weight) : visit.weight != null) return false;
-		if (vet != null ? !vet.equals(visit.vet) : visit.vet != null) return false;
-		if (reason != null ? !reason.equals(visit.reason) : visit.reason != null) return false;
-		if (diagnosis != null ? !diagnosis.equals(visit.diagnosis) : visit.diagnosis != null) return false;
-		if (indications != null ? !indications.equals(visit.indications) : visit.indications != null) return false;
-		return pet != null ? pet.equals(visit.pet) : visit.pet == null;
+		if (!Objects.equals(weight, visit.weight)) return false;
+		if (!Objects.equals(vet, visit.vet)) return false;
+		if (!Objects.equals(reason, visit.reason)) return false;
+		if (!Objects.equals(diagnosis, visit.diagnosis)) return false;
+		if (!Objects.equals(indications, visit.indications)) return false;
+		return Objects.equals(pet, visit.pet);
 	}
 
 	@Override

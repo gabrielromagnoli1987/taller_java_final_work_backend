@@ -6,7 +6,7 @@ import java.util.Objects;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Role {
@@ -51,7 +51,7 @@ public class Role {
 		this.name = name;
 	}
 
-	@JsonProperty
+	@JsonIgnore
 	public Collection<User> getUsers() {
 		return users;
 	}
