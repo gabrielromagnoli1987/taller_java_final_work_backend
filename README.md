@@ -11,8 +11,10 @@ This site was built using [spring-boot 2.1.8](https://start.spring.io/)
 
 **Docs reference:**
 
+- [Java Brains](https://www.youtube.com/user/koushks)
 - https://www.baeldung.com/role-and-privilege-for-spring-security-registration 
 - https://www.baeldung.com/spring-security-expressions
+- https://www.baeldung.com/spring-security-method-security
 - https://www.baeldung.com/java-bean-validation-not-null-empty-blank
 - https://www.baeldung.com/exception-handling-for-rest-with-spring
 - https://www.javainuse.com/spring/boot-jwt

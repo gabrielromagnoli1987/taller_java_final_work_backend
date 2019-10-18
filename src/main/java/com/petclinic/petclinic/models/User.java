@@ -1,9 +1,6 @@
 package com.petclinic.petclinic.models;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -57,7 +54,7 @@ public class User {
 			name = "users_roles",
 			joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
 			inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-	private Collection<Role> roles = new ArrayList<>();
+	private Collection<Role> roles = new HashSet<>();
 
 	@OneToOne
 	private UserConfig userConfig;
