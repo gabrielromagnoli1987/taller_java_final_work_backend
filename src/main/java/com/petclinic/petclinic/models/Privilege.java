@@ -1,6 +1,7 @@
 package com.petclinic.petclinic.models;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,7 +22,7 @@ public class Privilege {
 	private String name;
 
 	@ManyToMany(mappedBy = "privileges")
-	private Collection<Role> roles;
+	private Collection<Role> roles = new HashSet<>();
 
 	public Privilege() {
 	}

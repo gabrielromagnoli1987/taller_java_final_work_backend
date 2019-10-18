@@ -2,6 +2,7 @@ package com.petclinic.petclinic.models;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Objects;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -19,14 +20,14 @@ public class Role {
 	private String name;
 
 	@ManyToMany(mappedBy = "roles")
-	private Collection<User> users;
+	private Collection<User> users = new HashSet<>();
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
 			name = "roles_privileges",
 			joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"),
 			inverseJoinColumns = @JoinColumn(name = "privilege_id", referencedColumnName = "id"))
-	private Collection<Privilege> privileges = new ArrayList<>();
+	private Collection<Privilege> privileges = new HashSet<>();
 
 	public Role() {
 	}

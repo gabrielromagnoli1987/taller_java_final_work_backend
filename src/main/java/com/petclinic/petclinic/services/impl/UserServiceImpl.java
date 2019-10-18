@@ -123,7 +123,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	@Override
 	public String deleteUserById(Long userId) throws IllegalArgumentException {
 		userRepository.deleteById(userId);
-		return "The user with id: " + userId + "was deleted.";
+		return "The user with id: " + userId + " was deleted.";
 	}
 
 	/**
@@ -136,13 +136,24 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 		if (user == null) {
 			throw new UsernameNotFoundException("Invalid username or password.");
 		}
+		Collection<Role> roles = roleRepository.findByUsers_Id(user.getId());
 		return new org.springframework.security.core.userdetails.User(
 				user.getEmail(), user.getPassword(), user.isEnabled(), true, true,
-				true, getAuthorities(user.getRoles()));
+				true, getAuthorities(roles));
 	}
 
 	private Collection<? extends GrantedAuthority> getAuthorities(Collection<Role> roles) {
-		return getGrantedAuthorities(getPrivileges(roles));
+		// choose one of the two lines:
+		return getGrantedAuthorities(getRoles(roles)); // puts the roles on the token
+		// return getGrantedAuthorities(getPrivileges(roles)); // puts the privileges on the token
+	}
+
+	private List<String> getRoles(Collection<Role> roles) {
+		List<String> string_roles = new ArrayList<>();
+		for (Role role: roles) {
+			string_roles.add(role.getName());
+		}
+		return string_roles;
 	}
 
 	private List<String> getPrivileges(Collection<Role> roles) {
@@ -158,10 +169,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 		return privileges;
 	}
 
-	private List<GrantedAuthority> getGrantedAuthorities(List<String> privileges) {
+	private List<GrantedAuthority> getGrantedAuthorities(List<String> list) {
 		List<GrantedAuthority> authorities = new ArrayList<>();
-		for (String privilege : privileges) {
-			authorities.add(new SimpleGrantedAuthority(privilege));
+		for (String item : list) {
+			authorities.add(new SimpleGrantedAuthority(item));
 		}
 		return authorities;
 	}
