@@ -1,9 +1,9 @@
 package com.petclinic.petclinic.models.constants;
 
 public enum Roles {
-	ROLE_ADMIN("ROLE_ADMIN"),
-	ROLE_OWNER_USER("ROLE_OWNER_USER"),
-	ROLE_VET_USER("ROLE_VET_USER");
+	ROLE_ADMIN(Constants.ROLE_ADMIN),
+	ROLE_OWNER_USER(Constants.ROLE_OWNER_USER),
+	ROLE_VET_USER(Constants.ROLE_VET_USER);
 
 	private final String role;
 

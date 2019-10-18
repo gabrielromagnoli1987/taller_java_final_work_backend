@@ -19,6 +19,7 @@ import com.petclinic.petclinic.services.UserService;
 import com.petclinic.petclinic.utils.EmailValidator;
 import com.petclinic.petclinic.utils.HashingPassword;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -122,8 +123,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 	@Override
 	public String deleteUserById(Long userId) throws IllegalArgumentException {
-		userRepository.deleteById(userId);
-		return "The user with id: " + userId + " was deleted.";
+		try {
+			userRepository.deleteById(userId);
+			return "The user with id: " + userId + " was deleted.";
+		} catch (EmptyResultDataAccessException e) {
+			throw new IllegalArgumentException("The user with id: " + userId + " doesn't exists");
+		}
 	}
 
 	/**

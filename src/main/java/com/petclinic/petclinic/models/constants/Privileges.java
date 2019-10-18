@@ -1,8 +1,8 @@
 package com.petclinic.petclinic.models.constants;
 
 public enum Privileges {
-	READ_PRIVILEGE("READ_PRIVILEGE"),
-	WRITE_PRIVILEGE("WRITE_PRIVILEGE");
+	READ_PRIVILEGE(Constants.READ_PRIVILEGE),
+	WRITE_PRIVILEGE(Constants.WRITE_PRIVILEGE);
 
 	private final String privilege;
 
