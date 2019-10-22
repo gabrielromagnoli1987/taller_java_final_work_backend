@@ -4,11 +4,13 @@ import java.util.*;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 
+import com.petclinic.petclinic.dtos.EnableVetDTO;
 import com.petclinic.petclinic.dtos.UserDTO;
 import com.petclinic.petclinic.models.Privilege;
 import com.petclinic.petclinic.models.Role;
 import com.petclinic.petclinic.models.User;
 import com.petclinic.petclinic.models.UserConfig;
+import com.petclinic.petclinic.models.constants.Constants;
 import com.petclinic.petclinic.models.constants.Roles;
 import com.petclinic.petclinic.repositories.PrivilegeRepository;
 import com.petclinic.petclinic.repositories.RoleRepository;
@@ -23,7 +25,6 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -67,45 +68,40 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 	@Override
 	public User getUserByEmail(String userEmail) throws EntityNotFoundException {
-		Optional<User> user = Optional.ofNullable(userRepository.findByEmail(userEmail));
+		Optional<User> user = userRepository.findByEmail(userEmail);
 		return user.orElseThrow(() -> new EntityNotFoundException("User with email: " + userEmail + " does not exists"));
-	}
-
-	@Override
-	public User getUserByEmailAndPassword(String userEmail, String userPassword) throws BadCredentialsException {
-		return null;
 	}
 
 	@Override
 	public User createUser(UserDTO userDTO) throws EntityExistsException {
 		if (EmailValidator.validate(userDTO.getEmail())) {
-			User tempUser = userRepository.findByEmail(userDTO.getEmail());
-			if (tempUser == null) {
-				User user = new User(userDTO.getName(), userDTO.getLastname(), userDTO.getEmail());
-				user.setPassword(HashingPassword.hashPassword(userDTO.getPassword()));
-				user.setIsEnabled(true);
-				UserConfig userConfig = new UserConfig();
-				userConfigRepository.save(userConfig);
-				user.setUserConfig(userConfig);
-				Role role;
-				if (userDTO.isVet()) {
-					user.setAddress(userDTO.getAddress() != null ? userDTO.getAddress() : "");
-					// TODO: handle file
-					String path = "resumePath";
-					user.setResume(path);
-					role = roleRepository.findByName(Roles.ROLE_VET_USER.toString());
-				} else {
-					role = roleRepository.findByName(Roles.ROLE_OWNER_USER.toString());
-					user.setAddress("");
-					user.setResume("");
-				}
-				user.setRoles(Arrays.asList(role));
-				user = userRepository.save(user);
-				emailService.sendEmail(user.getEmail(), "New Account", "Welcome");
-				return user;
-			} else {
+			Optional<User> optionalUser = userRepository.findByEmail(userDTO.getEmail());
+			if (optionalUser.isPresent()) {
 				throw new EntityExistsException("The email: " + userDTO.getEmail() + " already exists");
 			}
+			User user = new User(userDTO.getName(), userDTO.getLastname(), userDTO.getEmail());
+			user.setPassword(HashingPassword.hashPassword(userDTO.getPassword()));
+			user.setIsEnabled(true);
+			UserConfig userConfig = new UserConfig();
+			userConfigRepository.save(userConfig);
+			user.setUserConfig(userConfig);
+			Role role;
+			if (userDTO.isVet()) {
+				user.setIsVetEnabled(false);
+				user.setAddress(userDTO.getAddress() != null ? userDTO.getAddress() : "");
+				// TODO: handle file
+				String path = "resumePath";
+				user.setResume(path);
+				role = roleRepository.findByName(Roles.ROLE_VET_USER.toString());
+			} else {
+				role = roleRepository.findByName(Roles.ROLE_OWNER_USER.toString());
+				user.setAddress("");
+				user.setResume("");
+			}
+			user.setRoles(Arrays.asList(role));
+			user = userRepository.save(user);
+			emailService.sendEmail(user.getEmail(), "New Account", "Welcome");
+			return user;
 		} else {
 			throw new IllegalArgumentException("The email: " + userDTO.getEmail() + " is not valid");
 		}
@@ -113,11 +109,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 	@Override
 	public User updateUser(UserDTO userDTO, Long userId) throws EntityNotFoundException, EntityExistsException {
-		return null;
-	}
-
-	@Override
-	public User updateUserEmail(String email, Long userId) throws EntityNotFoundException, EntityExistsException {
 		return null;
 	}
 
@@ -131,20 +122,32 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 		}
 	}
 
+	@Override
+	public User enableVetUser(Long userId, EnableVetDTO enableVetDTO) {
+		User user = this.getUserById(userId);
+		user.setIsVetEnabled(enableVetDTO.getIsEnable());
+		user = userRepository.save(user);
+		emailService.sendEmail(user.getEmail(), "Account activated", "Your account has been activated");
+		return user;
+	}
+
+
 	/**
 	 * Spring Security
 	 */
 	@Override
 	public UserDetails loadUserByUsername(String email)	throws UsernameNotFoundException {
 
-		User user = userRepository.findByEmail(email);
-		if (user == null) {
-			throw new UsernameNotFoundException("Invalid username or password.");
-		}
+		Optional<User> optionalUser = userRepository.findByEmail(email);
+		User user = optionalUser.orElseThrow(() -> new UsernameNotFoundException("Invalid username or password."));
 		Collection<Role> roles = roleRepository.findByUsers_Id(user.getId());
+		Boolean accountNonLocked = Boolean.TRUE;
+		if (user.getIsVetEnabled() != null && ! user.getIsVetEnabled()) {
+			accountNonLocked = Boolean.FALSE;
+		}
 		return new org.springframework.security.core.userdetails.User(
 				user.getEmail(), user.getPassword(), user.isEnabled(), true, true,
-				true, getAuthorities(roles));
+				accountNonLocked, getAuthorities(roles));
 	}
 
 	private Collection<? extends GrantedAuthority> getAuthorities(Collection<Role> roles) {

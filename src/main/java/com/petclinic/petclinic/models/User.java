@@ -49,6 +49,8 @@ public class User {
 	@NotNull
 	private Boolean isEnabled;
 
+	private Boolean isVetEnabled;
+
 	@ManyToMany
 	@JoinTable(
 			name = "users_roles",
@@ -156,6 +158,14 @@ public class User {
 
 	public void setIsEnabled(Boolean isEnabled) {
 		this.isEnabled = isEnabled;
+	}
+
+	public Boolean getIsVetEnabled() {
+		return isVetEnabled;
+	}
+
+	public void setIsVetEnabled(Boolean vetIsEnabled) {
+		this.isVetEnabled = vetIsEnabled;
 	}
 
 	public Collection<Role> getRoles() {
