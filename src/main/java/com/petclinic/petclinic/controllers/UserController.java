@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import javax.persistence.EntityNotFoundException;
 
+import com.petclinic.petclinic.dtos.EnableVetDTO;
 import com.petclinic.petclinic.models.User;
 import com.petclinic.petclinic.models.constants.Constants;
 import com.petclinic.petclinic.services.UserService;
@@ -55,5 +56,12 @@ public class UserController {
 		String message = userService.deleteUserById(userId);
 		Map<String, String> map = Collections.singletonMap("message", message);
 		return new ResponseEntity<>(map, HttpStatus.OK);
+	}
+
+	@PatchMapping("/{userId}")
+	@Secured(Constants.ROLE_ADMIN)
+	public ResponseEntity<User> validateVet(@PathVariable Long userId, EnableVetDTO enableVetDTO) throws EntityNotFoundException {
+		User user = userService.enableVetUser(userId, enableVetDTO);
+		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 }
