@@ -10,7 +10,6 @@ import com.petclinic.petclinic.models.Privilege;
 import com.petclinic.petclinic.models.Role;
 import com.petclinic.petclinic.models.User;
 import com.petclinic.petclinic.models.UserConfig;
-import com.petclinic.petclinic.models.constants.Constants;
 import com.petclinic.petclinic.models.constants.Roles;
 import com.petclinic.petclinic.repositories.PrivilegeRepository;
 import com.petclinic.petclinic.repositories.RoleRepository;
