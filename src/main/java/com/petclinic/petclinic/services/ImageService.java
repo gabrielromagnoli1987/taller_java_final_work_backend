@@ -10,7 +10,7 @@ public interface ImageService {
 
 	Image saveImage(MultipartFile file) throws IOException;
 
-	List<Image> saveImages(MultipartFile[] files) throws IOException;
+	List<Image> createImages(MultipartFile[] files) throws IOException;
 
 	void deleteImages(List<Image> images);
 

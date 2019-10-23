@@ -211,6 +211,16 @@ public class Pet {
 		this.images = images;
 	}
 
+	public void addImage(Image image) {
+		images.add(image);
+		image.setPet(this);
+	}
+
+	public void removeImage(Image image) {
+		images.remove(image);
+		image.setPet(null);
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
