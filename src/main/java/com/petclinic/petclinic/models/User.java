@@ -184,6 +184,11 @@ public class User {
 		this.userConfig = userConfig;
 	}
 
+	public void addPetToVet(Pet pet) {
+		vetsPets.add(pet);
+		pet.getVets().add(this);
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;

@@ -49,7 +49,7 @@ public class ImageServiceImpl implements ImageService {
 	}
 
 	@Override
-	public List<Image> saveImages(MultipartFile[] files) throws IOException {
+	public List<Image> createImages(MultipartFile[] files) throws IOException {
 		if (files.length == 0) {
 			LOGGER.error("There are no files.");
 			throw new IllegalArgumentException("There are no files.");
@@ -61,12 +61,12 @@ public class ImageServiceImpl implements ImageService {
 			}
 		}
 		try {
-			List<Image> images = new ArrayList<Image>();
+			List<Image> images = new ArrayList<>();
 			for (MultipartFile file : files) {
 				byte[] bytes = file.getBytes();
 				Path path = Paths.get(this.uploadFolder + UUID.randomUUID() + "-" + file.getOriginalFilename());
 				Files.write(path, bytes);
-				Image image = imageRepository.save(new Image(path.toString()));
+				Image image = new Image(path.toString());
 				images.add(image);
 			}
 			return images;

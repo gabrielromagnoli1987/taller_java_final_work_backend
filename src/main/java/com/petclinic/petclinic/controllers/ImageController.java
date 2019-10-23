@@ -23,7 +23,7 @@ public class ImageController {
 
 	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public List<Image> saveImages(@RequestParam("file") MultipartFile[] files) throws IOException {
-		return imageService.saveImages(files);
+		return imageService.createImages(files);
 	}
 
 }
