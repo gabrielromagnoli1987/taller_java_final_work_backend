@@ -5,7 +5,7 @@
 1. Install [docker-compose](https://docs.docker.com/compose/install/)
 2. `git clone https://github.com/gabrielromagnoli1987/taller_java_final_work_backend.git` 
 3. `cd taller_java_final_work_backend`
-4. `docker-compose up` (this will download a linux-maven-java11 image, a mysql server image and will run 2 containers connected on the same network)
+4. `docker-compose up` (this will download a openjdk:11 image with the Spring boot Application packaged as a .jar, a mysql server image and will run 2 containers connected on the same network)
 
 This site was built using [spring-boot 2.1.8](https://start.spring.io/)
 

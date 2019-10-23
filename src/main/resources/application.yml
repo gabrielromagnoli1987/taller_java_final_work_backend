@@ -41,6 +41,6 @@ admin:
   email: "petclinicadmin@gmail.com"
   password: "petClinicAdminPassword"
 
-upload-files-folder: "./static"
+upload-files-folder: "./images/"
 
 ---

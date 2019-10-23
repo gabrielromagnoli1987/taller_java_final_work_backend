@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.EntityNotFoundException;
+import javax.validation.Valid;
 
 import com.petclinic.petclinic.dtos.EnableVetDTO;
 import com.petclinic.petclinic.models.User;
@@ -60,7 +61,7 @@ public class UserController {
 
 	@PatchMapping("/{userId}")
 	@Secured(Constants.ROLE_ADMIN)
-	public ResponseEntity<User> validateVet(@PathVariable Long userId, EnableVetDTO enableVetDTO) throws EntityNotFoundException {
+	public ResponseEntity<User> enableVetUser(@PathVariable Long userId, @Valid @RequestBody EnableVetDTO enableVetDTO) throws EntityNotFoundException {
 		User user = userService.enableVetUser(userId, enableVetDTO);
 		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
