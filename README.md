@@ -17,5 +17,8 @@ This site was built using [spring-boot 2.1.8](https://start.spring.io/)
 - https://www.baeldung.com/spring-security-method-security
 - https://www.baeldung.com/java-bean-validation-not-null-empty-blank
 - https://www.baeldung.com/exception-handling-for-rest-with-spring
+- https://www.baeldung.com/hibernate-save-persist-update-merge-saveorupdate
 - https://www.javainuse.com/spring/boot-jwt
 - https://www.toptal.com/java/spring-boot-rest-api-error-handling
+- [OneToMany jpa and hibernate](https://vladmihalcea.com/the-best-way-to-map-a-onetomany-association-with-jpa-and-hibernate/)
+- [ManyToMany jpa and hibernate](https://www.javaworld.com/article/3387643/java-persistence-with-jpa-and-hibernate-part-2-many-to-many-relationships.html)

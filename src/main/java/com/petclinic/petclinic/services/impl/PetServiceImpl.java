@@ -3,17 +3,25 @@ package com.petclinic.petclinic.services.impl;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
+
+import javax.persistence.EntityNotFoundException;
 
 import com.petclinic.petclinic.dtos.PetDTO;
+import com.petclinic.petclinic.dtos.VaccineDTO;
 import com.petclinic.petclinic.models.Image;
 import com.petclinic.petclinic.models.Pet;
 import com.petclinic.petclinic.models.User;
+import com.petclinic.petclinic.models.Vaccine;
 import com.petclinic.petclinic.repositories.PetRepository;
 import com.petclinic.petclinic.services.ImageService;
 import com.petclinic.petclinic.services.PetService;
 import com.petclinic.petclinic.services.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,18 +43,35 @@ public class PetServiceImpl implements PetService {
 	}
 
 	@Override
+	public Page<Pet> getPets(Pageable pageable) {
+		return petRepository.findAll(PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()));
+	}
+
+	@Override
 	public Pet createPet(PetDTO petDTO, MultipartFile[] files, Principal principal) throws IOException {
-		Pet pet = dtoToEntity(petDTO);
+		Pet pet = new Pet();
+		BeanUtils.copyProperties(petDTO, pet, "vetId");
 		assignVetToPet(petDTO, pet);
 		assignOwnerToPet(principal, pet);
 		assignImagesToPet(files, pet);
 		return petRepository.save(pet);
 	}
 
-	private Pet dtoToEntity(PetDTO petDTO) {
-		Pet pet = new Pet();
-		BeanUtils.copyProperties(petDTO, pet, "vetId");
-		return pet;
+	@Override
+	public Pet getPetById(Long petId) throws EntityNotFoundException {
+		Optional<Pet> pet = petRepository.findById(petId);
+		return pet.orElseThrow(() -> new EntityNotFoundException("Pet with id: " + petId + " does not exists"));
+	}
+
+	@Override
+	public Vaccine addVaccine(Long petId, VaccineDTO vaccineDTO) {
+		Pet pet = getPetById(petId);
+		Vaccine vaccine = new Vaccine();
+		BeanUtils.copyProperties(vaccineDTO, vaccine);
+		vaccine.setPet(pet);
+		pet.getVaccines().add(vaccine);
+		petRepository.save(pet);
+		return vaccine;
 	}
 
 	private void assignVetToPet(PetDTO petDTO, Pet pet) {

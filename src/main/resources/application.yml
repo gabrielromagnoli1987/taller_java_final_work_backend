@@ -28,6 +28,9 @@ spring:
           connectiontimeout: 5000
           timeout: 3000
           writetimeout: 3000
+  jackson:
+    serialization:
+      write_dates_as_timestamps: false
 
 # token - 5hs
 access-token-validity-seconds: 18000
@@ -42,5 +45,3 @@ admin:
   password: "petClinicAdminPassword"
 
 upload-files-folder: "./images/"
-
----
