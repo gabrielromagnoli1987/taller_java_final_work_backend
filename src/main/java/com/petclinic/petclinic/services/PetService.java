@@ -25,4 +25,6 @@ public interface PetService {
 	Pet getPetById(Long petId) throws EntityNotFoundException;
 
 	Vaccine addVaccine(Long petId, VaccineDTO vaccineDTO);
+
+	String deleteVaccine(Long petId, Long vaccineId);
 }
