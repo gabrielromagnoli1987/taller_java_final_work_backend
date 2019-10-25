@@ -14,11 +14,13 @@ import com.petclinic.petclinic.models.Pet;
 import com.petclinic.petclinic.models.User;
 import com.petclinic.petclinic.models.Vaccine;
 import com.petclinic.petclinic.repositories.PetRepository;
+import com.petclinic.petclinic.repositories.VaccineRepository;
 import com.petclinic.petclinic.services.ImageService;
 import com.petclinic.petclinic.services.PetService;
 import com.petclinic.petclinic.services.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -36,6 +38,9 @@ public class PetServiceImpl implements PetService {
 
 	@Autowired
 	PetRepository petRepository;
+
+	@Autowired
+	VaccineRepository vaccineRepository;
 
 	@Override
 	public List<Pet> getAllPets() {
@@ -68,10 +73,18 @@ public class PetServiceImpl implements PetService {
 		Pet pet = getPetById(petId);
 		Vaccine vaccine = new Vaccine();
 		BeanUtils.copyProperties(vaccineDTO, vaccine);
-		vaccine.setPet(pet);
-		pet.getVaccines().add(vaccine);
-		petRepository.save(pet);
-		return vaccine;
+		pet.addVaccine(vaccine);
+		return vaccineRepository.save(vaccine);
+	}
+
+	@Override
+	public String deleteVaccine(Long petId, Long vaccineId) {
+		try {
+			vaccineRepository.deleteById(vaccineId);
+			return "The vaccine with id: " + vaccineId + " was deleted.";
+		} catch (EmptyResultDataAccessException e) {
+			throw new IllegalArgumentException("The vaccine with id: " + vaccineId + " doesn't exists");
+		}
 	}
 
 	private void assignVetToPet(PetDTO petDTO, Pet pet) {

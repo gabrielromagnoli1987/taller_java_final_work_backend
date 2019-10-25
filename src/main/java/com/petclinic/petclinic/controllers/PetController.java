@@ -2,7 +2,9 @@ package com.petclinic.petclinic.controllers;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import javax.validation.Valid;
 
 import com.petclinic.petclinic.dtos.PetDTO;
@@ -59,6 +61,13 @@ public class PetController {
 	public ResponseEntity<Vaccine> addVaccine(@PathVariable Long petId, @Valid @RequestBody VaccineDTO vaccineDTO) {
 		Vaccine vaccine = petService.addVaccine(petId, vaccineDTO);
 		return new ResponseEntity<>(vaccine, HttpStatus.CREATED);
+	}
+
+	@DeleteMapping(path = "/{petId}/vaccines/{vaccineId}")
+	public ResponseEntity<Map<String, String>> addVaccine(@PathVariable Long petId, @PathVariable Long vaccineId) {
+		String message = petService.deleteVaccine(petId, vaccineId);
+		Map<String, String> map = Collections.singletonMap("message", message);
+		return new ResponseEntity<>(map, HttpStatus.OK);
 	}
 
 }

@@ -221,6 +221,16 @@ public class Pet {
 		image.setPet(null);
 	}
 
+	public void addVaccine(Vaccine vaccine) {
+		vaccines.add(vaccine);
+		vaccine.setPet(this);
+	}
+
+	public void removeVaccine(Vaccine vaccine) {
+		vaccines.remove(vaccine);
+		vaccine.setPet(null);
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
