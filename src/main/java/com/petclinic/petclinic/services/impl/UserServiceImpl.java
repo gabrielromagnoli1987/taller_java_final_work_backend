@@ -88,9 +88,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 			if (userDTO.isVet()) {
 				user.setIsVetEnabled(false);
 				user.setAddress(userDTO.getAddress() != null ? userDTO.getAddress() : "");
-				// TODO: handle file
-				String path = "resumePath";
-				user.setResume(path);
+				user.setResume(userDTO.getResume() != null ? userDTO.getResume() : "");
 				role = roleRepository.findByName(Roles.ROLE_VET_USER.toString());
 			} else {
 				role = roleRepository.findByName(Roles.ROLE_OWNER_USER.toString());

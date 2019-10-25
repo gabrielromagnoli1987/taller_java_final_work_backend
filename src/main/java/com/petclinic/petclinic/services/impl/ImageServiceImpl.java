@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.petclinic.petclinic.models.Image;
+import com.petclinic.petclinic.models.Pet;
 import com.petclinic.petclinic.repositories.ImageRepository;
 import com.petclinic.petclinic.services.ImageService;
 import org.slf4j.Logger;
@@ -31,7 +32,7 @@ public class ImageServiceImpl implements ImageService {
 	ImageRepository imageRepository;
 
 	@Override
-	public Image saveImage(MultipartFile file) throws IOException {
+	public Image saveImage(MultipartFile file, Pet pet) throws IOException {
 		if (file.isEmpty()) {
 			throw new IllegalArgumentException("Image cannot be empty.");
 		}
@@ -40,6 +41,7 @@ public class ImageServiceImpl implements ImageService {
 			Path path = Paths.get(this.uploadFolder + UUID.randomUUID() + "-" + file.getOriginalFilename());
 			Files.write(path, bytes);
 			Image image = new Image(path.toString());
+			pet.addImage(image);
 			return imageRepository.save(image);
 		} catch (IOException e) {
 			e.printStackTrace();
