@@ -231,6 +231,46 @@ public class Pet {
 		vaccine.setPet(null);
 	}
 
+	public void addSurgery(Surgery surgery) {
+		surgeries.add(surgery);
+		surgery.setPet(this);
+	}
+
+	public void removeSurgery(Surgery surgery) {
+		surgeries.remove(surgery);
+		surgery.setPet(null);
+	}
+
+	public void addDisease(Disease disease) {
+		diseases.add(disease);
+		disease.setPet(this);
+	}
+
+	public void removeDisease(Disease disease) {
+		diseases.remove(disease);
+		disease.setPet(null);
+	}
+
+	public void addReproduction(Reproduction reproduction) {
+		reproductiveHistory.add(reproduction);
+		reproduction.setPet(this);
+	}
+
+	public void removeReproduction(Reproduction reproduction) {
+		reproductiveHistory.remove(reproduction);
+		reproduction.setPet(null);
+	}
+
+	public void addDewormed(Dewormed dewormed) {
+		deworming.add(dewormed);
+		dewormed.setPet(this);
+	}
+
+	public void removeDewormed(Dewormed dewormed) {
+		deworming.remove(dewormed);
+		dewormed.setPet(null);
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
