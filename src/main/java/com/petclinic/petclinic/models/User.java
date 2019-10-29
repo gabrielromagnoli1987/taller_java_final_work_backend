@@ -28,6 +28,9 @@ public class User {
 	private String email;
 
 	@NotBlank
+	private String phone;
+
+	@NotBlank
 	private String password;
 
 	private String address;
@@ -101,6 +104,14 @@ public class User {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
 	@JsonIgnore
@@ -197,29 +208,12 @@ public class User {
 
 		User user = (User) o;
 
-		if (!Objects.equals(id, user.id)) return false;
-		if (!Objects.equals(firstName, user.firstName)) return false;
-		if (!Objects.equals(lastName, user.lastName)) return false;
-		if (!Objects.equals(email, user.email)) return false;
-		if (!Objects.equals(password, user.password)) return false;
-		if (!Objects.equals(address, user.address)) return false;
-		if (!Objects.equals(resume, user.resume)) return false;
-		if (!Objects.equals(isEnabled, user.isEnabled)) return false;
-		return Objects.equals(roles, user.roles);
+		return email.equals(user.email);
 	}
 
 	@Override
 	public int hashCode() {
-		int result = id != null ? id.hashCode() : 0;
-		result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
-		result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
-		result = 31 * result + (email != null ? email.hashCode() : 0);
-		result = 31 * result + (password != null ? password.hashCode() : 0);
-		result = 31 * result + (address != null ? address.hashCode() : 0);
-		result = 31 * result + (resume != null ? resume.hashCode() : 0);
-		result = 31 * result + (isEnabled != null ? isEnabled.hashCode() : 0);
-		result = 31 * result + (roles != null ? roles.hashCode() : 0);
-		return result;
+		return email.hashCode();
 	}
 
 	@Override

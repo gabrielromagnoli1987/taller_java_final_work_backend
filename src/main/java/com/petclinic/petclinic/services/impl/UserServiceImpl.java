@@ -11,7 +11,6 @@ import com.petclinic.petclinic.models.Role;
 import com.petclinic.petclinic.models.User;
 import com.petclinic.petclinic.models.UserConfig;
 import com.petclinic.petclinic.models.constants.Roles;
-import com.petclinic.petclinic.repositories.PrivilegeRepository;
 import com.petclinic.petclinic.repositories.RoleRepository;
 import com.petclinic.petclinic.repositories.UserConfigRepository;
 import com.petclinic.petclinic.repositories.UserRepository;
@@ -33,9 +32,6 @@ import org.springframework.stereotype.Service;
 
 @Service(value = "userService")
 public class UserServiceImpl implements UserService, UserDetailsService {
-
-	@Autowired
-	PrivilegeRepository privilegeRepository;
 
 	@Autowired
 	RoleRepository roleRepository;
@@ -73,35 +69,50 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 	@Override
 	public User createUser(UserDTO userDTO) throws EntityExistsException {
-		if (EmailValidator.validate(userDTO.getEmail())) {
-			Optional<User> optionalUser = userRepository.findByEmail(userDTO.getEmail());
-			if (optionalUser.isPresent()) {
-				throw new EntityExistsException("The email: " + userDTO.getEmail() + " already exists");
-			}
-			User user = new User(userDTO.getName(), userDTO.getLastname(), userDTO.getEmail());
-			user.setPassword(HashingPassword.hashPassword(userDTO.getPassword()));
-			user.setIsEnabled(true);
-			UserConfig userConfig = new UserConfig();
-			userConfigRepository.save(userConfig);
-			user.setUserConfig(userConfig);
-			Role role;
-			if (userDTO.isVet()) {
-				user.setIsVetEnabled(false);
-				user.setAddress(userDTO.getAddress() != null ? userDTO.getAddress() : "");
-				user.setResume(userDTO.getResume() != null ? userDTO.getResume() : "");
-				role = roleRepository.findByName(Roles.ROLE_VET_USER.toString());
-			} else {
-				role = roleRepository.findByName(Roles.ROLE_OWNER_USER.toString());
-				user.setAddress("");
-				user.setResume("");
-			}
-			user.setRoles(Arrays.asList(role));
-			user = userRepository.save(user);
-			emailService.sendEmail(user.getEmail(), "New Account", "Welcome");
-			return user;
-		} else {
-			throw new IllegalArgumentException("The email: " + userDTO.getEmail() + " is not valid");
+		validateEmailFormat(userDTO.getEmail());
+		isEmailAvailable(userDTO.getEmail());
+		User user = new User(userDTO.getName(), userDTO.getLastName(), userDTO.getEmail());
+		user.setPhone(userDTO.getPhone());
+		user.setPassword(HashingPassword.hashPassword(userDTO.getPassword()));
+		user.setIsEnabled(true);
+		addUserConfig(user);
+		addRole(userDTO, user);
+		user = userRepository.save(user);
+		emailService.sendEmail(user.getEmail(), "New Account", "Welcome");
+		return user;
+	}
+
+	private void validateEmailFormat(String email) {
+		if (EmailValidator.validate(email)) return;
+		throw new IllegalArgumentException("The email format: " + email + " is not valid");
+	}
+
+	private void isEmailAvailable(String email) {
+		Optional<User> optionalUser = userRepository.findByEmail(email);
+		if (optionalUser.isPresent()) {
+			throw new EntityExistsException("The email: " + email + " already exists");
 		}
+	}
+
+	private void addUserConfig(User user) {
+		UserConfig userConfig = new UserConfig(true, true, false);
+		userConfigRepository.save(userConfig);
+		user.setUserConfig(userConfig);
+	}
+
+	private void addRole(UserDTO userDTO, User user) {
+		Role role;
+		if (userDTO.isVet()) {
+			user.setIsVetEnabled(false);
+			user.setAddress(userDTO.getAddress() != null ? userDTO.getAddress() : "");
+			user.setResume(userDTO.getResume() != null ? userDTO.getResume() : "");
+			role = roleRepository.findByName(Roles.ROLE_VET_USER.toString());
+		} else {
+			role = roleRepository.findByName(Roles.ROLE_OWNER_USER.toString());
+			user.setAddress("");
+			user.setResume("");
+		}
+		user.setRoles(Collections.singletonList(role));
 	}
 
 	@Override

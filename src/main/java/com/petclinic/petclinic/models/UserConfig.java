@@ -27,6 +27,12 @@ public class UserConfig {
 
     }
 
+    public UserConfig(Boolean showLastname, Boolean showEmail, Boolean showPhone) {
+        this.showLastname = showLastname;
+        this.showEmail = showEmail;
+        this.showPhone = showPhone;
+    }
+
     public Long getId() {
         return id;
     }
