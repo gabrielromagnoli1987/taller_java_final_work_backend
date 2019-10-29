@@ -1,6 +1,9 @@
 package com.petclinic.petclinic.services.impl;
 
+import java.security.Principal;
+
 import com.petclinic.petclinic.dtos.VaccineDTO;
+import com.petclinic.petclinic.exception.OwnershipException;
 import com.petclinic.petclinic.models.Pet;
 import com.petclinic.petclinic.models.Vaccine;
 import com.petclinic.petclinic.repositories.VaccineRepository;
@@ -21,8 +24,9 @@ public class VaccineServiceImpl implements VaccineService {
 	VaccineRepository vaccineRepository;
 
 	@Override
-	public Vaccine addVaccine(Long petId, VaccineDTO vaccineDTO) {
+	public Vaccine addVaccine(Long petId, VaccineDTO vaccineDTO, Principal principal) throws OwnershipException {
 		Pet pet = petService.getPetById(petId);
+		petService.canEditPet(pet, principal);
 		Vaccine vaccine = new Vaccine();
 		BeanUtils.copyProperties(vaccineDTO, vaccine);
 		pet.addVaccine(vaccine);
@@ -30,8 +34,10 @@ public class VaccineServiceImpl implements VaccineService {
 	}
 
 	@Override
-	public String deleteVaccine(Long petId, Long vaccineId) {
+	public String deleteVaccine(Long petId, Long vaccineId, Principal principal) throws OwnershipException {
 		try {
+			Pet pet = petService.getPetById(petId);
+			petService.canEditPet(pet, principal);
 			vaccineRepository.deleteById(vaccineId);
 			return "The vaccine with id: " + vaccineId + " was deleted.";
 		} catch (EmptyResultDataAccessException e) {
