@@ -9,7 +9,7 @@ public class UserDTO {
 	@NotBlank
 	private String name;
 	@NotBlank
-	private String lastname;
+	private String lastName;
 	@NotBlank
 	@Email
 	private String email;
@@ -26,18 +26,18 @@ public class UserDTO {
 
 	}
 
-	public UserDTO(String name, String lastname, String email, String phone, String password, Boolean isVet) {
+	public UserDTO(String name, String lastName, String email, String phone, String password, Boolean isVet) {
 		this.name = name;
-		this.lastname = lastname;
+		this.lastName = lastName;
 		this.email = email;
 		this.phone = phone;
 		this.password = password;
 		this.isVet = isVet;
 	}
 
-	public UserDTO(String name, String lastname, String email, String phone, String password, Boolean isVet, String resume) {
+	public UserDTO(String name, String lastName, String email, String phone, String password, Boolean isVet, String resume) {
 		this.name = name;
-		this.lastname = lastname;
+		this.lastName = lastName;
 		this.email = email;
 		this.phone = phone;
 		this.password = password;
@@ -53,12 +53,12 @@ public class UserDTO {
 		this.name = name;
 	}
 
-	public String getLastname() {
-		return lastname;
+	public String getLastName() {
+		return lastName;
 	}
 
-	public void setLastname(String lastname) {
-		this.lastname = lastname;
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
 	public String getEmail() {

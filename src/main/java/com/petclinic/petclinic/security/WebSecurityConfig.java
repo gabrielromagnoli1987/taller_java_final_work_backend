@@ -1,9 +1,8 @@
 package com.petclinic.petclinic.security;
 
-import javax.annotation.Resource;
-
 import com.petclinic.petclinic.models.constants.Roles;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,7 +25,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-	@Resource(name = "userService")
+	@Autowired
+	@Qualifier("userService")
 	private UserDetailsService userDetailsService;
 
 	@Autowired
@@ -58,6 +58,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.cors().and().csrf().disable()
 				.authorizeRequests()
 				.antMatchers("/api/auth/**").permitAll()
+				.antMatchers("/api/public-records/**").permitAll()
 				.antMatchers("/api/vets/**").hasAnyAuthority(Roles.ROLE_ADMIN.toString(), Roles.ROLE_VET_USER.toString())
 				.antMatchers("/api/pets/**").hasAnyAuthority(Roles.ROLE_OWNER_USER.toString(), Roles.ROLE_VET_USER.toString())
 				.anyRequest().authenticated().and()
