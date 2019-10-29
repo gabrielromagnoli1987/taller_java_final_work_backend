@@ -24,6 +24,7 @@ public class User {
 
 	@NotBlank
 	@Email
+	@Column(unique = true, nullable = false)
 	private String email;
 
 	@NotBlank

@@ -76,19 +76,12 @@ public class Role {
 
 		Role role = (Role) o;
 
-		if (!Objects.equals(id, role.id)) return false;
-		if (!Objects.equals(name, role.name)) return false;
-		if (!Objects.equals(users, role.users)) return false;
-		return Objects.equals(privileges, role.privileges);
+		return name.equals(role.name);
 	}
 
 	@Override
 	public int hashCode() {
-		int result = id != null ? id.hashCode() : 0;
-		result = 31 * result + (name != null ? name.hashCode() : 0);
-		result = 31 * result + (users != null ? users.hashCode() : 0);
-		result = 31 * result + (privileges != null ? privileges.hashCode() : 0);
-		return result;
+		return name.hashCode();
 	}
 
 	@Override
