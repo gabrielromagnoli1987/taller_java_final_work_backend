@@ -41,6 +41,13 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 		return buildResponseEntity(apiError);
 	}
 
+	@ExceptionHandler(OwnershipException.class)
+	protected ResponseEntity<Object> handleOwnership(OwnershipException ex) {
+		ApiError apiError = new ApiError(HttpStatus.FORBIDDEN);
+		apiError.setMessage(ex.getMessage());
+		return buildResponseEntity(apiError);
+	}
+
 	@ExceptionHandler(IOException.class)
 	protected ResponseEntity<Object> handleIOException(IOException ex) {
 		ApiError apiError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR);

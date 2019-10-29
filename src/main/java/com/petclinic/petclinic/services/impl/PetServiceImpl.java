@@ -7,9 +7,12 @@ import java.util.Optional;
 import javax.persistence.EntityNotFoundException;
 
 import com.petclinic.petclinic.dtos.PetDTO;
+import com.petclinic.petclinic.exception.OwnershipException;
 import com.petclinic.petclinic.models.Image;
 import com.petclinic.petclinic.models.Pet;
+import com.petclinic.petclinic.models.Role;
 import com.petclinic.petclinic.models.User;
+import com.petclinic.petclinic.models.constants.Constants;
 import com.petclinic.petclinic.repositories.PetRepository;
 import com.petclinic.petclinic.services.ImageService;
 import com.petclinic.petclinic.services.PetService;
@@ -60,11 +63,27 @@ public class PetServiceImpl implements PetService {
 		return pet.orElseThrow(() -> new EntityNotFoundException("Pet with id: " + petId + " does not exists"));
 	}
 
+	@Override
+	public Boolean canEditPet(Pet pet, Principal principal) throws OwnershipException {
+		if (isPrincipalPetsOwner(pet, principal)) return Boolean.TRUE;
+		if (isPrincipalPetsVet(pet, principal)) return Boolean.TRUE;
+		throw new OwnershipException("The pet with id: " + pet.getId() + " is not yours");
+	}
+
+	private boolean isPrincipalPetsOwner(Pet pet, Principal principal) {
+		return pet.getOwner().getEmail().equals(principal.getName());
+	}
+
+	private boolean isPrincipalPetsVet(Pet pet, Principal principal) {
+		User user = userService.getUserByEmail(principal.getName());
+		return pet.getVets().contains(user);
+	}
+
 	private void assignVetToPet(PetDTO petDTO, Pet pet) {
 		if (petDTO.getVetId() != null) {
 			User vet = userService.getUserById(petDTO.getVetId());
 			if (vet.getIsVetEnabled() == null || (vet.getIsVetEnabled() != null && ! vet.getIsVetEnabled())) {
-				throw new IllegalArgumentException("Wrong vet id: " + petDTO);
+				throw new IllegalArgumentException("Wrong vet id: " + petDTO.getVetId());
 			}
 			vet.addPetToVet(pet);
 		}
