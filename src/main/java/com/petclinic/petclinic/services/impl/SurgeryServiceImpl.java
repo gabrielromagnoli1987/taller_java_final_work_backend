@@ -1,6 +1,9 @@
 package com.petclinic.petclinic.services.impl;
 
+import java.security.Principal;
+
 import com.petclinic.petclinic.dtos.SurgeryDTO;
+import com.petclinic.petclinic.exception.OwnershipException;
 import com.petclinic.petclinic.models.Pet;
 import com.petclinic.petclinic.models.Surgery;
 import com.petclinic.petclinic.repositories.SurgeryRepository;
@@ -21,8 +24,9 @@ public class SurgeryServiceImpl implements SurgeryService {
 	SurgeryRepository surgeryRepository;
 
 	@Override
-	public Surgery addSurgery(Long petId, SurgeryDTO surgeryDTO) {
+	public Surgery addSurgery(Long petId, SurgeryDTO surgeryDTO, Principal principal) throws OwnershipException {
 		Pet pet = petService.getPetById(petId);
+		petService.canEditPet(pet, principal);
 		Surgery surgery = new Surgery();
 		BeanUtils.copyProperties(surgeryDTO, surgery);
 		pet.addSurgery(surgery);
@@ -30,8 +34,10 @@ public class SurgeryServiceImpl implements SurgeryService {
 	}
 
 	@Override
-	public String deleteSurgery(Long petId, Long surgeryId) {
+	public String deleteSurgery(Long petId, Long surgeryId, Principal principal) throws OwnershipException {
 		try {
+			Pet pet = petService.getPetById(petId);
+			petService.canEditPet(pet, principal);
 			surgeryRepository.deleteById(surgeryId);
 			return "The surgery with id: " + surgeryId + " was deleted.";
 		} catch (EmptyResultDataAccessException e) {

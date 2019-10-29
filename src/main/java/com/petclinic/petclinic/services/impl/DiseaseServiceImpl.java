@@ -1,6 +1,9 @@
 package com.petclinic.petclinic.services.impl;
 
+import java.security.Principal;
+
 import com.petclinic.petclinic.dtos.DiseaseDTO;
+import com.petclinic.petclinic.exception.OwnershipException;
 import com.petclinic.petclinic.models.Disease;
 import com.petclinic.petclinic.models.Pet;
 import com.petclinic.petclinic.repositories.DiseaseRepository;
@@ -21,8 +24,9 @@ public class DiseaseServiceImpl implements DiseaseService {
 	DiseaseRepository diseaseRepository;
 
 	@Override
-	public Disease addDisease(Long petId, DiseaseDTO diseaseDTO) {
+	public Disease addDisease(Long petId, DiseaseDTO diseaseDTO, Principal principal) throws OwnershipException {
 		Pet pet = petService.getPetById(petId);
+		petService.canEditPet(pet, principal);
 		Disease disease = new Disease();
 		BeanUtils.copyProperties(diseaseDTO, disease);
 		pet.addDisease(disease);
@@ -30,8 +34,10 @@ public class DiseaseServiceImpl implements DiseaseService {
 	}
 
 	@Override
-	public String deleteDisease(Long petId, Long diseaseId) {
+	public String deleteDisease(Long petId, Long diseaseId, Principal principal) throws OwnershipException {
 		try {
+			Pet pet = petService.getPetById(petId);
+			petService.canEditPet(pet, principal);
 			diseaseRepository.deleteById(diseaseId);
 			return "The disease with id: " + diseaseId + " was deleted.";
 		} catch (EmptyResultDataAccessException e) {
