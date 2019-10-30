@@ -27,12 +27,14 @@ public class PetController {
 	PetService petService;
 
 	@GetMapping("/all")
+	@Secured(Constants.ROLE_VET_USER)
 	public ResponseEntity<List<Pet>> getAllPets() {
 		List<Pet> pets = petService.getAllPets();
 		return new ResponseEntity<>(pets, HttpStatus.OK);
 	}
 
 	@GetMapping
+	@Secured(Constants.ROLE_VET_USER)
 	public ResponseEntity<Page> getPets(Pageable pageable) {
 		Page<Pet> pets = petService.getPets(pageable);
 		return new ResponseEntity<>(pets, HttpStatus.OK);

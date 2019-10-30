@@ -1,3 +1,3 @@
 FROM openjdk:11
-COPY target/ /app/target/
+ADD target/petclinic-0.0.1-SNAPSHOT.jar /app/target/petclinic-0.0.1-SNAPSHOT.jar
 RUN mkdir /app/images/

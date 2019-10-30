@@ -35,6 +35,9 @@ public class PetServiceImpl implements PetService {
 	@Autowired
 	PetRepository petRepository;
 
+	public PetServiceImpl() {
+	}
+
 	@Override
 	public List<Pet> getAllPets() {
 		return (List<Pet>) petRepository.findAll();

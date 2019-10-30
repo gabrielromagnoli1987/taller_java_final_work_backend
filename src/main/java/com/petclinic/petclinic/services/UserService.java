@@ -15,6 +15,10 @@ public interface UserService {
 
 	Page<User> getUsers(Pageable pageable);
 
+	Page<User> getVetUsers(Pageable pageable);
+
+	Page<User> getActiveVetUsers(Pageable pageable);
+
 	User getUserById(Long userId) throws EntityNotFoundException;
 
 	User getUserByEmail(String userEmail) throws EntityNotFoundException;

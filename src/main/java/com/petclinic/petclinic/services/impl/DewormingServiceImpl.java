@@ -23,6 +23,9 @@ public class DewormingServiceImpl implements DewormingService {
 	@Autowired
 	DewormedRepository dewormedRepository;
 
+	public DewormingServiceImpl() {
+	}
+
 	@Override
 	public Dewormed addDewormed(Long petId, DewormedDTO dewormedDTO, Principal principal) throws OwnershipException {
 		Pet pet = petService.getPetById(petId);

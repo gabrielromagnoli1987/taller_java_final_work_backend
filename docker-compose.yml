@@ -20,8 +20,8 @@ services:
     build: .
     image: pet_clinic_app
     working_dir: /app
-    volumes:
-    - ./target:/app/target
+#    volumes:
+#    - ./target:/app/target
     ports:
     - "5005:5005"
     - "8080:8080"

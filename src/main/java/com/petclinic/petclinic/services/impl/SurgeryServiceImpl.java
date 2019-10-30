@@ -23,6 +23,9 @@ public class SurgeryServiceImpl implements SurgeryService {
 	@Autowired
 	SurgeryRepository surgeryRepository;
 
+	public SurgeryServiceImpl() {
+	}
+
 	@Override
 	public Surgery addSurgery(Long petId, SurgeryDTO surgeryDTO, Principal principal) throws OwnershipException {
 		Pet pet = petService.getPetById(petId);

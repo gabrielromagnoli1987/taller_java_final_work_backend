@@ -31,6 +31,9 @@ public class ImageServiceImpl implements ImageService {
 	@Autowired
 	ImageRepository imageRepository;
 
+	public ImageServiceImpl() {
+	}
+
 	@Override
 	public Image saveImage(MultipartFile file, Pet pet) throws IOException {
 		if (file.isEmpty()) {

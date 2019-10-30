@@ -23,6 +23,9 @@ public class ReproductionServiceImpl implements ReproductionService {
 	@Autowired
 	ReproductionRepository reproductionRepository;
 
+	public ReproductionServiceImpl() {
+	}
+
 	@Override
 	public Reproduction addReproduction(Long petId, ReproductionDTO reproductionDTO, Principal principal) throws OwnershipException {
 		Pet pet = petService.getPetById(petId);

@@ -23,6 +23,9 @@ public class PublicRecordServiceImpl implements PublicRecordService {
 	@Autowired
 	PetService petService;
 
+	public PublicRecordServiceImpl() {
+	}
+
 	@Override
 	public Page<PublicRecordDTO> getPublicRecords(Pageable pageable) {
 		Page<Pet> pets = petService.getPets(pageable);
