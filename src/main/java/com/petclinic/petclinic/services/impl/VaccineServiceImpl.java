@@ -23,6 +23,9 @@ public class VaccineServiceImpl implements VaccineService {
 	@Autowired
 	VaccineRepository vaccineRepository;
 
+	public VaccineServiceImpl() {
+	}
+
 	@Override
 	public Vaccine addVaccine(Long petId, VaccineDTO vaccineDTO, Principal principal) throws OwnershipException {
 		Pet pet = petService.getPetById(petId);

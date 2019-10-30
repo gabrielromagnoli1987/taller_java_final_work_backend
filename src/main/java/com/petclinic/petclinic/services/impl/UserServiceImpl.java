@@ -45,6 +45,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	@Autowired
 	EmailService emailService;
 
+	public UserServiceImpl() {
+	}
+
 	@Override
 	public Iterable<User> getAllUsers() {
 		return userRepository.findAll();
@@ -53,6 +56,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	@Override
 	public Page<User> getUsers(Pageable pageable) {
 		return userRepository.findAll(PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()));
+	}
+
+	@Override
+	public Page<User> getVetUsers(Pageable pageable) {
+		return userRepository.findByIsVetEnabledIsNotNull(PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()));
+	}
+
+	@Override
+	public Page<User> getActiveVetUsers(Pageable pageable) {
+		return userRepository.findByIsVetEnabled(PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()));
 	}
 
 	@Override

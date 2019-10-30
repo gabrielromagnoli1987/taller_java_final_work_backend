@@ -39,6 +39,19 @@ public class UserController {
 		return new ResponseEntity<>(users, HttpStatus.OK);
 	}
 
+	@GetMapping("/vets")
+	@Secured(Constants.ROLE_ADMIN)
+	public ResponseEntity<Page<User>> getVetUsers(Pageable pageable) {
+		Page<User> users = userService.getVetUsers(pageable);
+		return new ResponseEntity<>(users, HttpStatus.OK);
+	}
+
+	@GetMapping("/vets-active")
+	public ResponseEntity<Page<User>> getActiveVetUsers(Pageable pageable) {
+		Page<User> users = userService.getActiveVetUsers(pageable);
+		return new ResponseEntity<>(users, HttpStatus.OK);
+	}
+
 	@GetMapping("/{userId}")
 	public ResponseEntity<User> getUserById(@PathVariable("userId") Long userId) throws EntityNotFoundException {
 		User user = userService.getUserById(userId);

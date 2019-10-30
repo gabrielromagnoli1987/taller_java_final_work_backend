@@ -24,6 +24,9 @@ public class EmailServiceImpl implements EmailService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(EmailServiceImpl.class);
 
+	public EmailServiceImpl() {
+	}
+
 	@Async
 	@Override
 	public void sendEmail(String to, String subject, String text) {

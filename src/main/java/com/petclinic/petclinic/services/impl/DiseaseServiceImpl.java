@@ -23,6 +23,9 @@ public class DiseaseServiceImpl implements DiseaseService {
 	@Autowired
 	DiseaseRepository diseaseRepository;
 
+	public DiseaseServiceImpl() {
+	}
+
 	@Override
 	public Disease addDisease(Long petId, DiseaseDTO diseaseDTO, Principal principal) throws OwnershipException {
 		Pet pet = petService.getPetById(petId);
