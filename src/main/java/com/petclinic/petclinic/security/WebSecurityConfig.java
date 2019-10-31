@@ -59,6 +59,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.authorizeRequests()
 				.antMatchers("/api/auth/**").permitAll()
 				.antMatchers("/api/public-records/**").permitAll()
+				.antMatchers("/api/users/**").hasAnyAuthority(Roles.ROLE_OWNER_USER.toString(), Roles.ROLE_VET_USER.toString(), Roles.ROLE_ADMIN.toString())
 				.antMatchers("/api/pets/**").hasAnyAuthority(Roles.ROLE_OWNER_USER.toString(), Roles.ROLE_VET_USER.toString())
 				.anyRequest().authenticated().and()
 				.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class)

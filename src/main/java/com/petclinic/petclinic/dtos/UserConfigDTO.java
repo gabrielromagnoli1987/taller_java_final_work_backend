@@ -2,7 +2,7 @@ package com.petclinic.petclinic.dtos;
 
 public class UserConfigDTO {
 
-	private Boolean showLastname;
+	private Boolean showLastName;
 
 	private Boolean showEmail;
 
@@ -11,18 +11,18 @@ public class UserConfigDTO {
 	public UserConfigDTO() {
 	}
 
-	public UserConfigDTO(Boolean showLastname, Boolean showEmail, Boolean showPhone) {
-		this.showLastname = showLastname;
+	public UserConfigDTO(Boolean showLastName, Boolean showEmail, Boolean showPhone) {
+		this.showLastName = showLastName;
 		this.showEmail = showEmail;
 		this.showPhone = showPhone;
 	}
 
-	public Boolean getShowLastname() {
-		return showLastname;
+	public Boolean getShowLastName() {
+		return showLastName;
 	}
 
-	public void setShowLastname(Boolean showLastname) {
-		this.showLastname = showLastname;
+	public void setShowLastName(Boolean showLastName) {
+		this.showLastName = showLastName;
 	}
 
 	public Boolean getShowEmail() {

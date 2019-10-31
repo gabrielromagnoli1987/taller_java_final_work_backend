@@ -1,5 +1,6 @@
 package com.petclinic.petclinic.controllers;
 
+import java.security.Principal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -7,7 +8,10 @@ import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 
 import com.petclinic.petclinic.dtos.EnableVetDTO;
+import com.petclinic.petclinic.dtos.UserConfigDTO;
+import com.petclinic.petclinic.exception.OwnershipException;
 import com.petclinic.petclinic.models.User;
+import com.petclinic.petclinic.models.UserConfig;
 import com.petclinic.petclinic.models.constants.Constants;
 import com.petclinic.petclinic.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
@@ -72,10 +77,16 @@ public class UserController {
 		return new ResponseEntity<>(map, HttpStatus.OK);
 	}
 
-	@PatchMapping("/{userId}")
+	@PatchMapping(path = "/{userId}/enable-vet", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@Secured(Constants.ROLE_ADMIN)
 	public ResponseEntity<User> enableVetUser(@PathVariable Long userId, @Valid @RequestBody EnableVetDTO enableVetDTO) throws EntityNotFoundException {
 		User user = userService.enableVetUser(userId, enableVetDTO);
 		return new ResponseEntity<>(user, HttpStatus.OK);
+	}
+
+	@PutMapping(path = "/{userId}/update-config", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<UserConfig> updateUserConfig(@PathVariable Long userId, @Valid @RequestBody UserConfigDTO userConfigDTO, Principal principal) throws EntityNotFoundException, OwnershipException {
+		UserConfig userConfig = userService.updateUserConfig(userId, userConfigDTO, principal);
+		return new ResponseEntity<>(userConfig, HttpStatus.OK);
 	}
 }

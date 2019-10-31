@@ -48,12 +48,12 @@ public class PublicRecordServiceImpl implements PublicRecordService {
 		publicRecordDTO.setPetAge(Period.between(pet.getBornDate(), LocalDate.now()).getYears());
 		publicRecordDTO.setOwnerId(owner.getId());
 		publicRecordDTO.setOwnerName(owner.getFirstName());
-		publicRecordDTO.setOwnerLastName(ownerUserConfig.getShowLastname() ? owner.getLastName() : "");
+		publicRecordDTO.setOwnerLastName(ownerUserConfig.getShowLastName() ? owner.getLastName() : "");
 		publicRecordDTO.setOwnerEmail(ownerUserConfig.getShowEmail() ? owner.getEmail() : "");
 		publicRecordDTO.setOwnerPhone(ownerUserConfig.getShowPhone() ? owner.getPhone() : "");
 		publicRecordDTO.setVetId(vet.getId());
 		publicRecordDTO.setVetName(vet.getFirstName());
-		publicRecordDTO.setVetLastName(vetUserConfig.getShowLastname() ? vet.getLastName() : "");
+		publicRecordDTO.setVetLastName(vetUserConfig.getShowLastName() ? vet.getLastName() : "");
 		publicRecordDTO.setVetEmail(vetUserConfig.getShowEmail() ? vet.getEmail() : "");
 		publicRecordDTO.setVetPhone(vetUserConfig.getShowPhone() ? vet.getPhone() : "");
 	}
