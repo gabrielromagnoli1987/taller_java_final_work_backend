@@ -71,6 +71,16 @@ public class PetServiceImpl implements PetService {
 		throw new OwnershipException("The pet with id: " + pet.getId() + " is not yours");
 	}
 
+	@Override
+	public Pet updatePet(Long petId, PetDTO petDTO, MultipartFile[] files, Principal principal) throws IOException {
+		Pet pet = getPetById(petId);
+		isPrincipalPetsOwner(pet, principal);
+		BeanUtils.copyProperties(petDTO, pet, "vetId");
+		assignVetToPet(petDTO, pet);
+		assignImagesToPet(files, pet);
+		return petRepository.save(pet);
+	}
+
 	private boolean isPrincipalPetsOwner(Pet pet, Principal principal) {
 		return pet.getOwner().getEmail().equals(principal.getName());
 	}

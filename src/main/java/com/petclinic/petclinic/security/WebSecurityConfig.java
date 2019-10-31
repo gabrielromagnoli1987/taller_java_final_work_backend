@@ -57,10 +57,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.cors().and().csrf().disable()
 				.authorizeRequests()
-				.antMatchers("/api/auth/**").permitAll()
-				.antMatchers("/api/public-records/**").permitAll()
 				.antMatchers("/api/users/**").hasAnyAuthority(Roles.ROLE_OWNER_USER.toString(), Roles.ROLE_VET_USER.toString(), Roles.ROLE_ADMIN.toString())
 				.antMatchers("/api/pets/**").hasAnyAuthority(Roles.ROLE_OWNER_USER.toString(), Roles.ROLE_VET_USER.toString())
+				.antMatchers("/api/auth/**").permitAll()
+				.antMatchers("/api/public-records/**").permitAll()
 				.anyRequest().authenticated().and()
 				.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class)
 				.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
