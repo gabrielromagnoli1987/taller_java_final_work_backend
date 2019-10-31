@@ -17,7 +17,7 @@ public class UserConfig {
     @OneToOne(mappedBy = "userConfig")
     private User user;
 
-    private Boolean showLastname;
+    private Boolean showLastName;
 
     private Boolean showEmail;
 
@@ -27,8 +27,8 @@ public class UserConfig {
 
     }
 
-    public UserConfig(Boolean showLastname, Boolean showEmail, Boolean showPhone) {
-        this.showLastname = showLastname;
+    public UserConfig(Boolean showLastName, Boolean showEmail, Boolean showPhone) {
+        this.showLastName = showLastName;
         this.showEmail = showEmail;
         this.showPhone = showPhone;
     }
@@ -50,12 +50,12 @@ public class UserConfig {
         this.user = user;
     }
 
-    public Boolean getShowLastname() {
-        return showLastname;
+    public Boolean getShowLastName() {
+        return showLastName;
     }
 
-    public void setShowLastname(Boolean showLastname) {
-        this.showLastname = showLastname;
+    public void setShowLastName(Boolean showLastName) {
+        this.showLastName = showLastName;
     }
 
     public Boolean getShowEmail() {

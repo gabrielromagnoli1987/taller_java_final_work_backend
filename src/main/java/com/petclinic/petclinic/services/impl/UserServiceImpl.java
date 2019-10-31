@@ -1,11 +1,14 @@
 package com.petclinic.petclinic.services.impl;
 
+import java.security.Principal;
 import java.util.*;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 
 import com.petclinic.petclinic.dtos.EnableVetDTO;
+import com.petclinic.petclinic.dtos.UserConfigDTO;
 import com.petclinic.petclinic.dtos.UserDTO;
+import com.petclinic.petclinic.exception.OwnershipException;
 import com.petclinic.petclinic.models.Privilege;
 import com.petclinic.petclinic.models.Role;
 import com.petclinic.petclinic.models.User;
@@ -18,6 +21,7 @@ import com.petclinic.petclinic.services.EmailService;
 import com.petclinic.petclinic.services.UserService;
 import com.petclinic.petclinic.utils.EmailValidator;
 import com.petclinic.petclinic.utils.HashingPassword;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
@@ -150,6 +154,22 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 		user = userRepository.save(user);
 		emailService.sendEmail(user.getEmail(), "Account activated", "Your account has been activated");
 		return user;
+	}
+
+	@Override
+	public UserConfig updateUserConfig(Long userId, UserConfigDTO userConfigDTO, Principal principal) throws OwnershipException {
+		User user = this.getUserById(userId);
+		canUpdate(user, principal);
+		UserConfig userConfig = user.getUserConfig();
+		BeanUtils.copyProperties(userConfigDTO, userConfig);
+		return userConfigRepository.save(userConfig);
+	}
+
+	private Boolean canUpdate(User user, Principal principal) throws OwnershipException {
+		if (user.getEmail().equals(principal.getName())) {
+			return Boolean.TRUE;
+		}
+		throw new OwnershipException("Error: the resource isn't yours");
 	}
 
 

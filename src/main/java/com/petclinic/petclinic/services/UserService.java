@@ -1,11 +1,15 @@
 package com.petclinic.petclinic.services;
 
+import java.security.Principal;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 
 import com.petclinic.petclinic.dtos.EnableVetDTO;
+import com.petclinic.petclinic.dtos.UserConfigDTO;
 import com.petclinic.petclinic.dtos.UserDTO;
+import com.petclinic.petclinic.exception.OwnershipException;
 import com.petclinic.petclinic.models.User;
+import com.petclinic.petclinic.models.UserConfig;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -30,4 +34,6 @@ public interface UserService {
 	String deleteUserById(Long userId);
 
 	User enableVetUser(Long userId, EnableVetDTO enableVetDTO);
+
+	UserConfig updateUserConfig(Long userId, UserConfigDTO userConfigDTO, Principal principal) throws OwnershipException;
 }
