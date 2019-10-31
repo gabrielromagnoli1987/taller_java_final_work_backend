@@ -54,4 +54,13 @@ public class PetController {
 		Pet pet = petService.getPetById(petId);
 		return new ResponseEntity<>(pet, HttpStatus.OK);
 	}
+
+	@PatchMapping(path = "/{petId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@Secured(Constants.ROLE_OWNER_USER)
+	public ResponseEntity<Pet> updatePet(@PathVariable Long petId, @Valid @RequestPart("petDTO") PetDTO petDTO,
+										 @RequestPart("file") MultipartFile[] files,
+										 Principal principal) throws IOException {
+		Pet updatedPet = petService.updatePet(petId, petDTO, files, principal);
+		return new ResponseEntity<>(updatedPet, HttpStatus.CREATED);
+	}
 }

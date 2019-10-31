@@ -24,4 +24,5 @@ public interface PetService {
 
 	Boolean canEditPet(Pet pet, Principal principal) throws OwnershipException;
 
+	Pet updatePet(Long petId, PetDTO petDTO, MultipartFile[] files, Principal principal) throws IOException;
 }
