@@ -271,6 +271,16 @@ public class Pet {
 		dewormed.setPet(null);
 	}
 
+	public void addVisit(Visit visit) {
+		visits.add(visit);
+		visit.setPet(this);
+	}
+
+	public void removeVisit(Visit visit) {
+		visits.remove(visit);
+		visit.setPet(null);
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
@@ -280,41 +290,24 @@ public class Pet {
 
 		if (!Objects.equals(id, pet.id)) return false;
 		if (!Objects.equals(name, pet.name)) return false;
-		if (!bornDate.equals(pet.bornDate)) return false;
+		if (!Objects.equals(bornDate, pet.bornDate)) return false;
 		if (!Objects.equals(species, pet.species)) return false;
 		if (!Objects.equals(race, pet.race)) return false;
 		if (sex != pet.sex) return false;
 		if (!Objects.equals(color, pet.color)) return false;
-		if (!Objects.equals(observations, pet.observations)) return false;
-		if (!Objects.equals(owner, pet.owner)) return false;
-		if (!Objects.equals(vets, pet.vets)) return false;
-		if (!Objects.equals(vaccines, pet.vaccines)) return false;
-		if (!Objects.equals(surgeries, pet.surgeries)) return false;
-		if (!Objects.equals(diseases, pet.diseases)) return false;
-		if (!Objects.equals(reproductiveHistory, pet.reproductiveHistory))
-			return false;
-		if (!Objects.equals(deworming, pet.deworming)) return false;
-		return Objects.equals(visits, pet.visits);
+		return Objects.equals(observations, pet.observations);
 	}
 
 	@Override
 	public int hashCode() {
 		int result = id != null ? id.hashCode() : 0;
 		result = 31 * result + (name != null ? name.hashCode() : 0);
-		result = 31 * result + bornDate.hashCode();
+		result = 31 * result + (bornDate != null ? bornDate.hashCode() : 0);
 		result = 31 * result + (species != null ? species.hashCode() : 0);
 		result = 31 * result + (race != null ? race.hashCode() : 0);
 		result = 31 * result + (sex != null ? sex.hashCode() : 0);
 		result = 31 * result + (color != null ? color.hashCode() : 0);
 		result = 31 * result + (observations != null ? observations.hashCode() : 0);
-		result = 31 * result + (owner != null ? owner.hashCode() : 0);
-		result = 31 * result + (vets != null ? vets.hashCode() : 0);
-		result = 31 * result + (vaccines != null ? vaccines.hashCode() : 0);
-		result = 31 * result + (surgeries != null ? surgeries.hashCode() : 0);
-		result = 31 * result + (diseases != null ? diseases.hashCode() : 0);
-		result = 31 * result + (reproductiveHistory != null ? reproductiveHistory.hashCode() : 0);
-		result = 31 * result + (deworming != null ? deworming.hashCode() : 0);
-		result = 31 * result + (visits != null ? visits.hashCode() : 0);
 		return result;
 	}
 
