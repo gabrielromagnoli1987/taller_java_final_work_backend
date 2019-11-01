@@ -40,8 +40,6 @@ public class PublicRecordServiceImpl implements PublicRecordService {
 	private void fillPublicRecordDTO(Pet pet, PublicRecordDTO publicRecordDTO) {
 		User owner = pet.getOwner();
 		UserConfig ownerUserConfig = owner.getUserConfig();
-		User vet = pet.getVets().get(pet.getVets().size() - 1);
-		UserConfig vetUserConfig = vet.getUserConfig();
 		publicRecordDTO.setPetId(pet.getId());
 		publicRecordDTO.setPetImageLink(pet.getImages().size() > 0 ? pet.getImages().get(0).getPath() : "");
 		publicRecordDTO.setPetName(pet.getName());
@@ -51,10 +49,20 @@ public class PublicRecordServiceImpl implements PublicRecordService {
 		publicRecordDTO.setOwnerLastName(ownerUserConfig.getShowLastName() ? owner.getLastName() : "");
 		publicRecordDTO.setOwnerEmail(ownerUserConfig.getShowEmail() ? owner.getEmail() : "");
 		publicRecordDTO.setOwnerPhone(ownerUserConfig.getShowPhone() ? owner.getPhone() : "");
-		publicRecordDTO.setVetId(vet.getId());
-		publicRecordDTO.setVetName(vet.getFirstName());
-		publicRecordDTO.setVetLastName(vetUserConfig.getShowLastName() ? vet.getLastName() : "");
-		publicRecordDTO.setVetEmail(vetUserConfig.getShowEmail() ? vet.getEmail() : "");
-		publicRecordDTO.setVetPhone(vetUserConfig.getShowPhone() ? vet.getPhone() : "");
+		if (pet.getVets().size() > 0) {
+			User vet = pet.getVets().get(pet.getVets().size() - 1);
+			UserConfig vetUserConfig = vet.getUserConfig();
+			publicRecordDTO.setVetId(vet.getId());
+			publicRecordDTO.setVetName(vet.getFirstName());
+			publicRecordDTO.setVetLastName(vetUserConfig.getShowLastName() ? vet.getLastName() : "");
+			publicRecordDTO.setVetEmail(vetUserConfig.getShowEmail() ? vet.getEmail() : "");
+			publicRecordDTO.setVetPhone(vetUserConfig.getShowPhone() ? vet.getPhone() : "");
+		} else {
+			publicRecordDTO.setVetId(null);
+			publicRecordDTO.setVetName("");
+			publicRecordDTO.setVetLastName("");
+			publicRecordDTO.setVetEmail("");
+			publicRecordDTO.setVetPhone("");
+		}
 	}
 }

@@ -16,6 +16,9 @@ public class VisitDTO {
 
 	private String indications;
 
+	@NotNull
+	private Long vetId;
+
 	public VisitDTO() {
 
 	}
@@ -66,5 +69,13 @@ public class VisitDTO {
 
 	public void setIndications(String indications) {
 		this.indications = indications;
+	}
+
+	public Long getVetId() {
+		return vetId;
+	}
+
+	public void setVetId(Long vetId) {
+		this.vetId = vetId;
 	}
 }
