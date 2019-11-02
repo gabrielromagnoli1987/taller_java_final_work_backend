@@ -3,11 +3,13 @@ package com.petclinic.petclinic.security;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import javax.transaction.Transactional;
 
 import com.petclinic.petclinic.models.Privilege;
 import com.petclinic.petclinic.models.Role;
 import com.petclinic.petclinic.models.User;
+import com.petclinic.petclinic.models.UserConfig;
 import com.petclinic.petclinic.models.constants.Privileges;
 import com.petclinic.petclinic.models.constants.Roles;
 import com.petclinic.petclinic.repositories.PrivilegeRepository;
@@ -23,19 +25,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class InitialDataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
-	boolean alreadySetup = false;
+	private boolean alreadySetup = false;
 
-	@Autowired
-	private UserRepository userRepository;
+	private final UserRepository userRepository;
 
-	@Autowired
-	private RoleRepository roleRepository;
+	private final RoleRepository roleRepository;
 
-	@Autowired
-	private PrivilegeRepository privilegeRepository;
+	private final PrivilegeRepository privilegeRepository;
 
-	@Autowired
-	private PasswordEncoder passwordEncoder;
+	private final PasswordEncoder passwordEncoder;
 
 	@Value("${admin.name}")
 	private String adminName;
@@ -45,6 +43,15 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 
 	@Value("${admin.password}")
 	private String adminPassword;
+
+	@Autowired
+	public InitialDataLoader(UserRepository userRepository, RoleRepository roleRepository,
+							 PrivilegeRepository privilegeRepository, PasswordEncoder passwordEncoder) {
+		this.userRepository = userRepository;
+		this.roleRepository = roleRepository;
+		this.privilegeRepository = privilegeRepository;
+		this.passwordEncoder = passwordEncoder;
+	}
 
 	@Override
 	@Transactional
@@ -61,16 +68,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		createRoleIfNotFound(Roles.ROLE_VET_USER.toString(), Arrays.asList(readPrivilege));
 
 		Role adminRole = roleRepository.findByName(Roles.ROLE_ADMIN.toString());
-		User user = new User();
-		user.setFirstName(adminName);
-		user.setLastName(adminName);
-		user.setPassword(passwordEncoder.encode(adminPassword));
-		user.setEmail(adminEmail);
-		user.setPhone("080023646");
-		user.setRoles(Arrays.asList(adminRole));
-		user.setIsEnabled(true);
-		userRepository.save(user);
-
+		createUserIfNotFound(adminEmail, adminRole);
 		alreadySetup = true;
 	}
 
@@ -93,6 +91,23 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 			roleRepository.save(role);
 		}
 		return role;
+	}
+
+	private void createUserIfNotFound(String adminEmail, Role adminRole) {
+		Optional<User> optionalUser = userRepository.findByEmail(adminEmail);
+		if(optionalUser.isEmpty()) {
+			User user = new User();
+			user.setFirstName(adminName);
+			user.setLastName(adminName);
+			user.setPassword(passwordEncoder.encode(adminPassword));
+			user.setEmail(adminEmail);
+			user.setPhone("080023646");
+			user.setRoles(Arrays.asList(adminRole));
+			user.setIsEnabled(true);
+			UserConfig userConfig = new UserConfig(true, true, true);
+			user.setUserConfig(userConfig);
+			userRepository.save(user);
+		}
 	}
 
 }
