@@ -65,6 +65,9 @@ public class User {
 	@OneToOne
 	private UserConfig userConfig;
 
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	private List<FutureEvent> futureEvents = new ArrayList<>();
+
 	public User() {
 	}
 
@@ -196,9 +199,27 @@ public class User {
 		this.userConfig = userConfig;
 	}
 
+	public List<FutureEvent> getFutureEvents() {
+		return futureEvents;
+	}
+
+	public void setFutureEvents(List<FutureEvent> futureEvents) {
+		this.futureEvents = futureEvents;
+	}
+
 	public void addPetToVet(Pet pet) {
 		vetsPets.add(pet);
 		pet.getVets().add(this);
+	}
+
+	public void addFutureEventToUser(FutureEvent futureEvent) {
+		this.futureEvents.add(futureEvent);
+		futureEvent.setUser(this);
+	}
+
+	public void removeFutureEventFromUser(FutureEvent futureEvent) {
+		this.futureEvents.remove(futureEvent);
+		futureEvent.setUser(null);
 	}
 
 	@Override

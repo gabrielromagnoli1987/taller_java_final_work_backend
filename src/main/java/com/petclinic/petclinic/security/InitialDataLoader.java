@@ -14,6 +14,7 @@ import com.petclinic.petclinic.models.constants.Privileges;
 import com.petclinic.petclinic.models.constants.Roles;
 import com.petclinic.petclinic.repositories.PrivilegeRepository;
 import com.petclinic.petclinic.repositories.RoleRepository;
+import com.petclinic.petclinic.repositories.UserConfigRepository;
 import com.petclinic.petclinic.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,6 +29,8 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 	private boolean alreadySetup = false;
 
 	private final UserRepository userRepository;
+
+	private final UserConfigRepository userConfigRepository;
 
 	private final RoleRepository roleRepository;
 
@@ -45,9 +48,10 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 	private String adminPassword;
 
 	@Autowired
-	public InitialDataLoader(UserRepository userRepository, RoleRepository roleRepository,
+	public InitialDataLoader(UserRepository userRepository, UserConfigRepository userConfigRepository, RoleRepository roleRepository,
 							 PrivilegeRepository privilegeRepository, PasswordEncoder passwordEncoder) {
 		this.userRepository = userRepository;
+		this.userConfigRepository = userConfigRepository;
 		this.roleRepository = roleRepository;
 		this.privilegeRepository = privilegeRepository;
 		this.passwordEncoder = passwordEncoder;
@@ -105,6 +109,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 			user.setRoles(Arrays.asList(adminRole));
 			user.setIsEnabled(true);
 			UserConfig userConfig = new UserConfig(true, true, true);
+			userConfigRepository.save(userConfig);
 			user.setUserConfig(userConfig);
 			userRepository.save(user);
 		}
