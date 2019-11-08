@@ -563,7 +563,7 @@
 							"formdata": [
 								{
 									"key": "petDTO",
-									"value": "{\"name\":\"pet1\", \"bornDate\": \"2019-10-15\", \"species\": \"species 1\", \"race\": \"some race\", \"sex\": \"MALE\", \"color\": \"brown\", \"observations\": \"bla bla\", \"vetId\": 10}",
+									"value": "{\"name\":\"pet1\", \"bornDate\": \"2019-10-15\", \"species\": \"species 1\", \"race\": \"some race\", \"sex\": \"MALE\", \"color\": \"brown\", \"observations\": \"bla bla\", \"vetId\": 11}",
 									"contentType": "application/json",
 									"type": "text"
 								},
@@ -884,7 +884,7 @@
 							"raw": "{\n\t\"isEnable\": true\n}"
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/users/10/enable-vet",
+							"raw": "http://localhost:8080/api/users/11/enable-vet",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -893,7 +893,7 @@
 							"path": [
 								"api",
 								"users",
-								"10",
+								"11",
 								"enable-vet"
 							]
 						}
@@ -963,6 +963,53 @@
 							"path": [
 								"api",
 								"public-records"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "events",
+			"item": [
+				{
+					"name": "createFutureEvent",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"ABC\",\n\t\"localDateTime\": \"2019-08-13T13:20:00\",\n\t\"petId\": 12,\n\t\"description\": \"bla bla\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/events",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"events"
 							]
 						}
 					},
