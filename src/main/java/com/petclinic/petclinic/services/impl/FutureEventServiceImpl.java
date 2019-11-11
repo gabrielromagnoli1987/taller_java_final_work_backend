@@ -3,8 +3,12 @@ package com.petclinic.petclinic.services.impl;
 import java.security.Principal;
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
+import java.util.Optional;
+
+import javax.persistence.EntityNotFoundException;
 
 import com.petclinic.petclinic.dtos.FutureEventDTO;
+import com.petclinic.petclinic.exception.OwnershipException;
 import com.petclinic.petclinic.models.FutureEvent;
 import com.petclinic.petclinic.models.Pet;
 import com.petclinic.petclinic.models.User;
@@ -40,5 +44,16 @@ public class FutureEventServiceImpl implements FutureEventService {
 		futureEvent.setPet(pet);
 		user.addFutureEventToUser(futureEvent);
 		return futureEventRepository.save(futureEvent);
+	}
+
+	@Override
+	public String deleteFutureEvent(Long futureEventId, Principal principal) throws OwnershipException {
+		Optional<FutureEvent> optionalFutureEvent = futureEventRepository.findById(futureEventId);
+		FutureEvent futureEvent = optionalFutureEvent.orElseThrow(() -> new EntityNotFoundException("FutureEvent with id: " + futureEventId + " does not exists"));
+		if (! futureEvent.getUser().getEmail().equals(principal.getName())) {
+			throw new OwnershipException("That resource is not yours");
+		}
+		futureEventRepository.deleteById(futureEventId);
+		return "FutureEvent with id: " + futureEventId + " was deleted";
 	}
 }
