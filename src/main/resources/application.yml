@@ -35,7 +35,7 @@ spring:
 # token - 5hs
 access-token-validity-seconds: 18000
 signing-key: "cGV0Y2xpbmljX1RUUFMyMDE5"
-issuer: "https://petclinic.com"
+issuer: "https://unlp.petclinic.com"
 
 header-string: Authorization
 
