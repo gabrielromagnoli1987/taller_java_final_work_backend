@@ -32,6 +32,20 @@ spring:
     serialization:
       write_dates_as_timestamps: false
 
+# keytool -genkeypair -alias unlp.petclinic -keyalg RSA -keysize 2048 -storetype PKCS12 -keystore unlp.petclinic.p12 -validity 3650
+
+server:
+  port: 443
+  ssl:
+    # The format used for the keystore.
+    key-store-type: PKCS12
+    # The path to the keystore containing the certificate
+    key-store: unlp.petclinic.p12
+    # The password used to generate the certificate
+    key-store-password: unlp.petclinic
+    # The alias mapped to the certificate
+    keyAlias: unlp.petclinic
+
 # token - 5hs
 access-token-validity-seconds: 18000
 signing-key: "cGV0Y2xpbmljX1RUUFMyMDE5"
