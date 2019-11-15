@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import com.petclinic.petclinic.dtos.FutureEventDTO;
+import com.petclinic.petclinic.exception.OwnershipException;
 import com.petclinic.petclinic.models.FutureEvent;
 import com.petclinic.petclinic.services.FutureEventService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class FutureEventController {
 	}
 
 	@DeleteMapping(path = "/{futureEventId}")
-	public ResponseEntity<Map<String, String>> deleteFutureEvent(@PathVariable Long futureEventId, Principal principal) {
+	public ResponseEntity<Map<String, String>> deleteFutureEvent(@PathVariable Long futureEventId, Principal principal) throws OwnershipException {
 		String message = futureEventService.deleteFutureEvent(futureEventId, principal);
 		Map<String, String> map = Collections.singletonMap("message", message);
 		return new ResponseEntity<>(map, HttpStatus.OK);
