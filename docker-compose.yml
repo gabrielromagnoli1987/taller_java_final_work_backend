@@ -33,6 +33,8 @@ services:
       MYSQL_DATABASE: "${DATABASE_NAME}"
       MYSQL_USER: "${DATABASE_USER}"
       MYSQL_ROOT_PASSWORD: "${DATABASE_PASSWORD}"
+    volumes:
+      - ./pet-clinic-data:/var/lib/mysql
     ports:
       # <Port exposed> : < MySQL Port running inside container>
       - '3306:3306'
