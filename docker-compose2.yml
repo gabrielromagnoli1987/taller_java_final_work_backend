@@ -1,0 +1,75 @@
+version: '3.3'
+services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    restart: always
+    ports:
+      #- "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - certs:/etc/nginx/certs:ro
+      - vhostd:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+    labels:
+      - com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy
+
+  # Needs a public domain to work and a hosting with letsencrypt compatibility. Doesn't work locally.
+  letsencrypt:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    restart: always
+    environment:
+      - NGINX_PROXY_CONTAINER=nginx-proxy
+    volumes:
+      - certs:/etc/nginx/certs:rw
+      - vhostd:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+  pet_clinic_db:
+    container_name: pet_clinic_db
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: "${DATABASE_NAME}"
+      MYSQL_USER: "${DATABASE_USER}"
+      MYSQL_ROOT_PASSWORD: "${DATABASE_PASSWORD}"
+    volumes:
+      - ./pet-clinic-data:/var/lib/mysql
+    ports:
+      # <Port exposed> : < MySQL Port running inside container>
+      - '3306:3306'
+    expose:
+      # Opens port 3306 on the container
+      - '3306'
+
+  pet_clinic_app:
+    container_name: pet_clinic_app
+    restart: always
+    build: .
+    image: pet_clinic_app
+    working_dir: /app
+    volumes:
+      - ./unlp.petclinic.p12:/app/unlp.petclinic.p12
+      - ./target:/app/target
+      - ./wait-for-it.sh:/app/wait-for-it.sh
+    ports:
+      - "5005:5005"
+    expose:
+      - "80"
+      #- "443"
+    #command: bash -c "chmod +x ./wait-for-it.sh && ./wait-for-it.sh pet_clinic_db:3306 && /usr/local/openjdk-11/bin/java -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=0.0.0.0:5005 -jar /app/target/petclinic-0.0.1-SNAPSHOT.jar"
+    command: bash -c "chmod +x ./wait-for-it.sh && ./wait-for-it.sh pet_clinic_db:3306 && /usr/local/openjdk-11/bin/java -jar /app/target/petclinic-0.0.1-SNAPSHOT.jar"
+    depends_on:
+      - pet_clinic_db
+    environment:
+      #- VIRTUAL_PROTO=https
+      - VIRTUAL_PORT=80
+      - VIRTUAL_HOST=petclinic.xyz
+      - LETSENCRYPT_HOST=petclinic.xyz
+      - LETSENCRYPT_EMAIL=gabrielromagnoli1987@gmail.com
+
+volumes:
+  certs:
+  html:
+  vhostd:

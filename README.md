@@ -5,12 +5,19 @@
 1. Install [docker-compose](https://docs.docker.com/compose/install/)
 2. `git clone https://github.com/gabrielromagnoli1987/taller_java_final_work_backend.git` 
 3. `cd taller_java_final_work_backend`
-4. `docker-compose up` (this will download a openjdk:11 image with the Spring boot Application packaged as a .jar, a mysql server image and will run 2 containers connected on the same network)
+4. `mvn install` To build the project.
+5. `docker-compose up` This will download a openjdk:11 image copy the application.jar to that image, a mysql server image, 
+a nginx server image and will run the 3 containers connected on the same network.
 
 This site was built using [spring-boot 2.1.8](https://start.spring.io/)
 
+**Architecture**
+
+![Alt text](Petclinic_architecture.png?raw=true "Architecture")
+
 **Docs reference:**
 
+- [UNLP](https://catedras.info.unlp.edu.ar/course/view.php?id=931)
 - [Java Brains](https://www.youtube.com/user/koushks)
 - https://www.baeldung.com/role-and-privilege-for-spring-security-registration 
 - https://www.baeldung.com/spring-security-expressions
