@@ -6,7 +6,7 @@
 2. `git clone https://github.com/gabrielromagnoli1987/taller_java_final_work_backend.git` 
 3. `cd taller_java_final_work_backend`
 4. `mvn install` To build the project.
-5. `docker-compose up` This will download a openjdk:11 image copy the application.jar to that image, a mysql server image, 
+5. `docker-compose up` This will download a openjdk:11 image (and copy the application.jar into the image), a mysql server image, 
 a nginx server image and will run the 3 containers connected on the same network.
 
 This site was built using [spring-boot 2.1.8](https://start.spring.io/)
