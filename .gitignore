@@ -31,3 +31,4 @@ build/
 .vscode/
 
 pet-clinic-data
+nginx/certs/nginx.conf

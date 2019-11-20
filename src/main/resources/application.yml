@@ -35,7 +35,7 @@ spring:
 # keytool -genkeypair -alias unlp.petclinic -keyalg RSA -keysize 2048 -storetype PKCS12 -keystore unlp.petclinic.p12 -validity 3650
 
 server:
-  port: 443
+  port: 8443
   ssl:
     # The format used for the keystore.
     key-store-type: PKCS12
