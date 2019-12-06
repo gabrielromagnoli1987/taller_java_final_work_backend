@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 	@Override
 	public Page<User> getActiveVetUsers(Pageable pageable) {
-		return userRepository.findByIsVetEnabled(PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()));
+		return userRepository.findByIsVetEnabledTrue(PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()));
 	}
 
 	@Override

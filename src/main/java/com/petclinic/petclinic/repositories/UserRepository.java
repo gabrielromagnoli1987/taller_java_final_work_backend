@@ -15,6 +15,6 @@ public interface UserRepository extends PagingAndSortingRepository<User, Long> {
 
 	Page<User> findByIsVetEnabledIsNotNull(Pageable pageable);
 
-	Page<User> findByIsVetEnabled(Pageable pageable);
+	Page<User> findByIsVetEnabledTrue(Pageable pageable);
 
 }
