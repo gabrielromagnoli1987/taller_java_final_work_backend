@@ -36,7 +36,7 @@ services:
     working_dir: /app
     volumes:
       - ./unlp.petclinic.p12:/app/unlp.petclinic.p12
-      - ./target:/app/target
+      #- ./target:/app/target
       - ./wait-for-it.sh:/app/wait-for-it.sh
       - images:/app/images
     ports:
