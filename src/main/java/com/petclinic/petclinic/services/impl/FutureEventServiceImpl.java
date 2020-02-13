@@ -1,24 +1,24 @@
 package com.petclinic.petclinic.services.impl;
 
-import java.security.Principal;
-import java.time.DateTimeException;
-import java.time.LocalDateTime;
-import java.util.Optional;
-
-import javax.persistence.EntityNotFoundException;
-
 import com.petclinic.petclinic.dtos.FutureEventDTO;
 import com.petclinic.petclinic.exception.OwnershipException;
 import com.petclinic.petclinic.models.FutureEvent;
 import com.petclinic.petclinic.models.Pet;
 import com.petclinic.petclinic.models.User;
-import com.petclinic.petclinic.repositories.FutureEventRepository;
+import com.petclinic.petclinic.persistence.dao.FutureEventDAO;
+import com.petclinic.petclinic.persistence.utils.DAOFactory;
 import com.petclinic.petclinic.services.FutureEventService;
 import com.petclinic.petclinic.services.PetService;
 import com.petclinic.petclinic.services.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.persistence.EntityNotFoundException;
+import java.security.Principal;
+import java.time.DateTimeException;
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 public class FutureEventServiceImpl implements FutureEventService {
@@ -29,8 +29,7 @@ public class FutureEventServiceImpl implements FutureEventService {
 	@Autowired
 	UserService userService;
 
-	@Autowired
-	FutureEventRepository futureEventRepository;
+	FutureEventDAO futureEventDAO = DAOFactory.getFutureEventDAO();
 
 	@Override
 	public FutureEvent createFutureEvent(FutureEventDTO futureEventDTO, Principal principal) {
@@ -43,17 +42,19 @@ public class FutureEventServiceImpl implements FutureEventService {
 		BeanUtils.copyProperties(futureEventDTO, futureEvent, "petId");
 		futureEvent.setPet(pet);
 		user.addFutureEventToUser(futureEvent);
-		return futureEventRepository.save(futureEvent);
+		return futureEventDAO.create(futureEvent);
 	}
 
 	@Override
 	public String deleteFutureEvent(Long futureEventId, Principal principal) throws OwnershipException {
-		Optional<FutureEvent> optionalFutureEvent = futureEventRepository.findById(futureEventId);
+		Optional<FutureEvent> optionalFutureEvent = futureEventDAO.retrieve(futureEventId);
 		FutureEvent futureEvent = optionalFutureEvent.orElseThrow(() -> new EntityNotFoundException("FutureEvent with id: " + futureEventId + " does not exists"));
 		if (! futureEvent.getUser().getEmail().equals(principal.getName())) {
 			throw new OwnershipException("That resource is not yours");
 		}
-		futureEventRepository.deleteById(futureEventId);
+		FutureEvent futureEvent1 = new FutureEvent();
+		futureEvent.setId(futureEventId);
+		futureEventDAO.delete(futureEvent);
 		return "FutureEvent with id: " + futureEventId + " was deleted";
 	}
 }

@@ -1,17 +1,12 @@
 package com.petclinic.petclinic.services.impl;
 
-import java.io.IOException;
-import java.security.Principal;
-import java.util.List;
-import java.util.Optional;
-import javax.persistence.EntityNotFoundException;
-
 import com.petclinic.petclinic.dtos.PetDTO;
 import com.petclinic.petclinic.exception.OwnershipException;
 import com.petclinic.petclinic.models.Image;
 import com.petclinic.petclinic.models.Pet;
 import com.petclinic.petclinic.models.User;
-import com.petclinic.petclinic.repositories.PetRepository;
+import com.petclinic.petclinic.persistence.dao.PetDAO;
+import com.petclinic.petclinic.persistence.utils.DAOFactory;
 import com.petclinic.petclinic.services.ImageService;
 import com.petclinic.petclinic.services.PetService;
 import com.petclinic.petclinic.services.UserService;
@@ -23,6 +18,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityNotFoundException;
+import java.io.IOException;
+import java.security.Principal;
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class PetServiceImpl implements PetService {
 
@@ -32,20 +33,19 @@ public class PetServiceImpl implements PetService {
 	@Autowired
 	UserService userService;
 
-	@Autowired
-	PetRepository petRepository;
+	PetDAO petDAO = DAOFactory.getPetDAO();
 
 	public PetServiceImpl() {
 	}
 
 	@Override
 	public List<Pet> getAllPets() {
-		return (List<Pet>) petRepository.findAll();
+		return (List<Pet>) petDAO.findAll();
 	}
 
 	@Override
 	public Page<Pet> getPets(Pageable pageable) {
-		return petRepository.findAll(PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()));
+		return petDAO.findAll(PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()));
 	}
 
 	@Override
@@ -55,12 +55,12 @@ public class PetServiceImpl implements PetService {
 		assignVetToPet(petDTO, pet);
 		assignOwnerToPet(principal, pet);
 		assignImagesToPet(files, pet);
-		return petRepository.save(pet);
+		return petDAO.create(pet);
 	}
 
 	@Override
 	public Pet getPetById(Long petId) throws EntityNotFoundException {
-		Optional<Pet> pet = petRepository.findById(petId);
+		Optional<Pet> pet = petDAO.retrieve(petId);
 		return pet.orElseThrow(() -> new EntityNotFoundException("Pet with id: " + petId + " does not exists"));
 	}
 
@@ -78,7 +78,7 @@ public class PetServiceImpl implements PetService {
 		BeanUtils.copyProperties(petDTO, pet, "vetId");
 		assignVetToPet(petDTO, pet);
 		assignImagesToPet(files, pet);
-		return petRepository.save(pet);
+		return petDAO.update(petId, pet);
 	}
 
 	private boolean isPrincipalPetsOwner(Pet pet, Principal principal) {

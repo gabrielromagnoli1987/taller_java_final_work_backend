@@ -1,12 +1,11 @@
 package com.petclinic.petclinic.services.impl;
 
-import java.security.Principal;
-
 import com.petclinic.petclinic.dtos.ReproductionDTO;
 import com.petclinic.petclinic.exception.OwnershipException;
 import com.petclinic.petclinic.models.Pet;
 import com.petclinic.petclinic.models.Reproduction;
-import com.petclinic.petclinic.repositories.ReproductionRepository;
+import com.petclinic.petclinic.persistence.dao.ReproductionDAO;
+import com.petclinic.petclinic.persistence.utils.DAOFactory;
 import com.petclinic.petclinic.services.PetService;
 import com.petclinic.petclinic.services.ReproductionService;
 import org.springframework.beans.BeanUtils;
@@ -14,14 +13,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
+
 @Service
 public class ReproductionServiceImpl implements ReproductionService {
 
 	@Autowired
 	PetService petService;
 
-	@Autowired
-	ReproductionRepository reproductionRepository;
+	ReproductionDAO reproductionDAO = DAOFactory.getReproductionDAO();
 
 	public ReproductionServiceImpl() {
 	}
@@ -33,7 +33,7 @@ public class ReproductionServiceImpl implements ReproductionService {
 		Reproduction reproduction = new Reproduction();
 		BeanUtils.copyProperties(reproductionDTO, reproduction);
 		pet.addReproduction(reproduction);
-		return reproductionRepository.save(reproduction);
+		return reproductionDAO.create(reproduction);
 	}
 
 	@Override
@@ -41,7 +41,9 @@ public class ReproductionServiceImpl implements ReproductionService {
 		try {
 			Pet pet = petService.getPetById(petId);
 			petService.canEditPet(pet, principal);
-			reproductionRepository.deleteById(reproductionId);
+			Reproduction reproduction = new Reproduction();
+			reproduction.setId(reproductionId);
+			reproductionDAO.delete(reproduction);
 			return "The reproduction with id: " + reproductionId + " was deleted.";
 		} catch (EmptyResultDataAccessException e) {
 			throw new IllegalArgumentException("The reproduction with id: " + reproductionId + " doesn't exists");

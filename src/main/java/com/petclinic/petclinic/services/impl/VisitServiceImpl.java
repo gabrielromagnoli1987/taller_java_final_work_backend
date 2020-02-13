@@ -1,19 +1,20 @@
 package com.petclinic.petclinic.services.impl;
 
-import java.security.Principal;
-
 import com.petclinic.petclinic.dtos.VisitDTO;
 import com.petclinic.petclinic.exception.OwnershipException;
 import com.petclinic.petclinic.models.Pet;
 import com.petclinic.petclinic.models.User;
 import com.petclinic.petclinic.models.Visit;
-import com.petclinic.petclinic.repositories.VisitRepository;
+import com.petclinic.petclinic.persistence.dao.VisitDAO;
+import com.petclinic.petclinic.persistence.utils.DAOFactory;
 import com.petclinic.petclinic.services.PetService;
 import com.petclinic.petclinic.services.UserService;
 import com.petclinic.petclinic.services.VisitService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.security.Principal;
 
 @Service
 public class VisitServiceImpl implements VisitService {
@@ -24,8 +25,7 @@ public class VisitServiceImpl implements VisitService {
 	@Autowired
 	UserService userService;
 
-	@Autowired
-	VisitRepository visitRepository;
+	VisitDAO visitDAO = DAOFactory.getVisitDAO();
 
 	public VisitServiceImpl() {
 	}
@@ -38,7 +38,7 @@ public class VisitServiceImpl implements VisitService {
 		BeanUtils.copyProperties(visitDTO, visit, "vetId");
 		assignVetToVisit(visitDTO, visit);
 		pet.addVisit(visit);
-		return visitRepository.save(visit);
+		return visitDAO.create(visit);
 	}
 
 	private void assignVetToVisit(VisitDTO visitDTO, Visit visit) {
