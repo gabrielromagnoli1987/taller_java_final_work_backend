@@ -5,21 +5,36 @@ import com.petclinic.petclinic.persistence.utils.EntityManagerFactoryUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
-
+@Repository
+//@Transactional
 public class GenericDAOHibernateJPA<T> implements GenericDAO<T> {
 
     protected Class<T> persistentClass;
 
+//    @PersistenceContext
+//    private EntityManager entityManager;
+
+    public GenericDAOHibernateJPA() {
+
+    }
+
     public GenericDAOHibernateJPA(Class<T> clazz) {
         persistentClass = clazz;
     }
+
+//    public EntityManager getEntityManager() {
+//        return entityManager;
+//    }
 
     @Override
     public T create(T entity) {
