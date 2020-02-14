@@ -36,7 +36,7 @@ public class UserDAOHibernateJPA extends GenericDAOHibernateJPA<User> implements
     @Override
     public Page<User> findByIsVetEnabledIsNotNull(Pageable pageable) {
         EntityManager entityManager = EntityManagerFactoryUtils.getEntityManagerFactory().createEntityManager();
-        List<User> users = (List<User>) entityManager.createQuery("SELECT user FROM User user WHERE user.isVetEnabled IS NOT NULL")
+        List<User> users = entityManager.createQuery("SELECT user FROM User user WHERE user.isVetEnabled IS NOT NULL", User.class)
                 .setFirstResult((int) pageable.getOffset())
                 .setMaxResults(pageable.getPageSize())
                 .getResultList();
@@ -47,7 +47,7 @@ public class UserDAOHibernateJPA extends GenericDAOHibernateJPA<User> implements
     @Override
     public Page<User> findByIsVetEnabledTrue(Pageable pageable) {
         EntityManager entityManager = EntityManagerFactoryUtils.getEntityManagerFactory().createEntityManager();
-        List<User> users = (List<User>) entityManager.createQuery("SELECT user FROM User user WHERE user.isVetEnabled = TRUE")
+        List<User> users = entityManager.createQuery("SELECT user FROM User user WHERE user.isVetEnabled = TRUE", User.class)
                 .setFirstResult((int) pageable.getOffset())
                 .setMaxResults(pageable.getPageSize())
                 .getResultList();
